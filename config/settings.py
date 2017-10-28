@@ -12,13 +12,13 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 
 import os
 import environ
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+# Build paths inside the cars_app like this: os.path.join(BASE_DIR, ...)
 
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-ROOT_DIR = environ.Path(__file__) - 3
-APPS_DIR = ROOT_DIR.path('project')
+ROOT_DIR = environ.Path(__file__) - 2
+APPS_DIR = ROOT_DIR.path('cars_app')
 
 
 # Quick-start development settings - unsuitable for production
@@ -49,8 +49,8 @@ THIRD_PARTY_APPS = (
 )
 
 LOCAL_APPS = (
-    'project.api',
-    'project.car',
+    'cars_app.api',
+    'cars_app.car',
 )
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -146,5 +146,13 @@ STATIC_URL = '/static/'
 # MEDIA_ROOT = str(APPS_DIR('media'))
 
 REST_FRAMEWORK = {
-
+    'DEFAULT_PERMISSION_CLASSES': [
+        # 'rest_framework.permissions.IsAdminUser',
+        # 'rest_framework.permissions.IsAuthenticated',
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ),
+    'PAGE_SIZE': 10  # enable pagination
 }
