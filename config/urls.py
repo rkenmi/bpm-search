@@ -21,5 +21,5 @@ from django.contrib.auth.views import LoginView
 urlpatterns = [
     url(r'^', LoginView.as_view()),
     url(r'^admin/', admin.site.urls),
-    url(r'^api/', include('cars_app.api.urls')),
+    url(r'^api/', include('project.api.urls')),
 ]
