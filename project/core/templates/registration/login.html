@@ -2,11 +2,17 @@
 {% load render_bundle from webpack_loader %}
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Hello React</title>
-    </head>
-    <body>
-        <div id="root"></div>
-        {% render_bundle 'main' %}
-    </body>
+<head>
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap-theme.min.css">
+  <title>Hello React</title>
+</head>
+<body>
+<div id="topnav"></div>
+<div id="root"></div>
+{% render_bundle 'main' %}
+</body>
 </html>
