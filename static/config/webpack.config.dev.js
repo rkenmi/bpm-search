@@ -70,9 +70,7 @@ module.exports = {
     // There are also additional JS chunk files if you use code splitting.
     chunkFilename: 'bundles/js/[name].chunk.js',
     // This is the URL that app is served from. We use "/" in development.
-    //    publicPath: publicPath + "static/",
-    // Tell django to use this URL to load packages and not use STATIC_URL + bundle_name,
-    publicPath: 'http://localhost:3000/assets/bundles/',
+       publicPath: publicPath + "static/",
     // Point sourcemap entries to original disk location (format as URL on Windows)
     devtoolModuleFilenameTemplate: info =>
       path.resolve(info.absoluteResourcePath).replace(/\\/g, '/'),
@@ -106,7 +104,6 @@ module.exports = {
       // please link the files into your node_modules/ and let module-resolution kick in.
       // Make sure your source files are compiled, as they will not be processed in any way.
       new ModuleScopePlugin(paths.appSrc, [paths.appPackageJson]),
-      new BundleTracker({filename: './webpack-stats.json'}),
     ],
   },
   module: {
@@ -161,7 +158,7 @@ module.exports = {
               // directory for faster rebuilds.
               cacheDirectory: true,
               plugins: [
-                'react-hot-loader/babel'
+                'react-hot-loader/babel',
               ]
             },
           },

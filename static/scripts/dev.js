@@ -4,8 +4,10 @@ process.env.NODE_ENV = 'development';
 
 var webpack = require('webpack');
 var WebpackDevServer = require('webpack-dev-server');
-const config = require('../config/webpack.config.dev');
+var config = require('../config/webpack.config.dev');
 
+// Tell django to use this URL to load packages and not use STATIC_URL + bundle_name,
+config.output.publicPath = 'http://localhost:3000/assets/bundles/';
 
 new WebpackDevServer(webpack(config), {
   publicPath: config.output.publicPath,

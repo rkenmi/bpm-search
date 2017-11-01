@@ -1,26 +1,48 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
+import './css/index.css';
+import 'semantic-ui-css/semantic.min.css';
+import App from './containers/App';
 import registerServiceWorker from './registerServiceWorker';
 import { AppContainer } from 'react-hot-loader';
-import navbarInstance from './Navbar';
+import { Provider } from 'react-redux';
+import store from './stores';
 
 const render = Component => {
-  ReactDOM.render(navbarInstance, document.getElementById('topnav'));
+
   ReactDOM.render(
-    <AppContainer>
-      <Component />
-    </AppContainer>,
+    <Provider store={store}>
+      <AppContainer>
+        <Component />
+      </AppContainer>
+    </Provider>,
     document.getElementById('root'),
   );
   registerServiceWorker();
 };
 
-render(App);
+store.subscribe(() => {
+  console.log(store.getState())
+});
 
-// Make components hot reloadable
+store.dispatch({
+  type: "ADD",
+  payload: 30
+});
+
+
+store.dispatch({
+  type: "SUBTRACT",
+  payload: 12
+});
+
+store.dispatch({
+  type: "NEW_SONG",
+  payload: "Meteora"
+});
+
+render(App);
 if (module.hot) {
-  module.hot.accept('./App', () => { render(App) })
-  module.hot.accept('./Navbar', () => { render(App) })
+  module.hot.accept('./containers/App', () => { render(App) })
+  module.hot.accept('./containers/Login', () => { render(App) })
 }
