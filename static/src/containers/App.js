@@ -5,9 +5,22 @@ import { Container, Grid } from 'semantic-ui-react'
 import MenuExampleLabeledIconsVertical from './Menu';
 import Login from './Login';
 import { connect } from 'react-redux';
-import {setSong} from "../actions/songActions";
+import { setSong, setAuthToken} from "../actions/authActions";
 
 class App extends Component {
+
+  _renderLogin() {
+    if (!this.props.auth.authorized) {
+      return (
+        <Login/>
+      );
+    } else {
+      return (
+        <p>Hey, you're logged in!</p>
+      );
+    }
+  }
+
   render() {
     let loginUrl = `/api`;
     return (
@@ -22,7 +35,7 @@ class App extends Component {
                 <Container text>
                   <h1>CarZ</h1>
                   <span className="App">
-                    <Login/>
+                    {this._renderLogin()}
                   </span>
                 </Container>
               </Grid.Column>
@@ -36,7 +49,7 @@ class App extends Component {
 const mapStateToProps = (state) => {
   return {
     song: state.songReducer,
-    math: state.mathReducer,
+    auth: state.authReducer,
   }
 };
 
@@ -45,6 +58,9 @@ const mapDispatchToProps = (dispatch) => {
     setSong: (song) => {
       dispatch(setSong(song));
     },
+    setAuthToken: (token) => {
+      dispatch(setAuthToken(token));
+    }
   }
 };
 
