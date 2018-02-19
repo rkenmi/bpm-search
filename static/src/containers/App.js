@@ -25,7 +25,6 @@ class App extends Component {
     let loginUrl = `/api`;
     return (
       <span>
-        <p>{this.props.song.results}</p>
         <Grid>
           <Grid.Row>
               <Grid.Column width={3}>
@@ -48,16 +47,12 @@ class App extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    song: state.songReducer,
     auth: state.authReducer,
   }
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    setSong: (song) => {
-      dispatch(setSong(song));
-    },
     setAuthToken: (token) => {
       dispatch(setAuthToken(token));
     }

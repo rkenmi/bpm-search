@@ -3,12 +3,11 @@ import { Button, Form, Message } from 'semantic-ui-react'
 import axios from 'axios'
 import {setAuthToken} from "../actions/authActions";
 import store from "../stores";
+import {AUTH, DEV_URL} from "../config/Api";
 axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
 axios.defaults.xsrfCookieName = "csrftoken";
 
 class Login extends Component {
-  apiBaseUrl = "http://localhost:8000/api/";
-
   constructor(props){
     super(props);
     this.state = {
@@ -42,7 +41,7 @@ class Login extends Component {
       username: this.state.user,
       password: this.state.password
     };
-    axios.post(this.apiBaseUrl+'login/', payload)
+    axios.post(DEV_URL + AUTH, payload)
       .then(res => {
         console.log(res);
         this.setState({
