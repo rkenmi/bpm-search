@@ -1,5 +1,5 @@
 const initialState = {
-  results: '',
+  token: null,
   authorized: false,
 };
 
@@ -8,7 +8,7 @@ const authReducer = (state=initialState, action) => {
     case "SET_AUTH_TOKEN":
       state = {
         ...state,
-        results: action.payload,
+        token: action.payload,
         authorized: true,
       };
       break;

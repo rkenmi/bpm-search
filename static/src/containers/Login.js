@@ -1,11 +1,6 @@
 import React, { Component } from 'react'
 import { Button, Form, Message } from 'semantic-ui-react'
-import axios from 'axios'
-import {setAuthToken} from "../actions/authActions";
-import store from "../stores";
-import {AUTH, DEV_URL} from "../config/Api";
-axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
-axios.defaults.xsrfCookieName = "csrftoken";
+import {isLoggedIn, login} from "../util/Auth";
 
 class Login extends Component {
   constructor(props){
@@ -32,30 +27,12 @@ class Login extends Component {
 
   handleChange(e) {
     this.setState({[e.target.name]: e.target.value});
-    // console.log(this.state);
   }
 
   handleSubmit(e){
     e.preventDefault();
-    let payload = {
-      username: this.state.user,
-      password: this.state.password
-    };
-    axios.post(DEV_URL + AUTH, payload)
-      .then(res => {
-        console.log(res);
-        this.setState({
-        });
-        store.dispatch(setAuthToken(res.data.key));
-      })
-      .catch(err => {
-        console.log(err);
-        this.setState({
-          error: 'Invalid login'
-        });
-        throw err;
-      });
-    console.log(payload);
+
+    login.call(this, this.state.user, this.state.password);
   }
 
   render(){

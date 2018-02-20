@@ -6,6 +6,7 @@ import MenuExampleLabeledIconsVertical from './Menu';
 import Login from './Login';
 import { connect } from 'react-redux';
 import { setSong, setAuthToken} from "../actions/authActions";
+import store from "../stores";
 
 class App extends Component {
 
@@ -23,6 +24,7 @@ class App extends Component {
 
   render() {
     let loginUrl = `/api`;
+    const state = store.getState();
     return (
       <span>
         <Grid>
