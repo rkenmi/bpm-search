@@ -2,23 +2,21 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './css/index.css';
 import 'semantic-ui-css/semantic.min.css';
-import {App} from './containers/App';
 import registerServiceWorker from './registerServiceWorker';
 import { AppContainer } from 'react-hot-loader';
 import { Provider } from 'react-redux';
 import store from './stores';
 import {BrowserRouter} from "react-router-dom";
+import App from "./containers/App";
 
 const render = Component => {
 
   ReactDOM.render(
-    <BrowserRouter>
-      <Provider store={store}>
-        <AppContainer>
-          <Component />
-        </AppContainer>
-      </Provider>
-    </BrowserRouter>,
+    <Provider store={store}>
+      <AppContainer>
+        <Component />
+      </AppContainer>
+    </Provider>,
   document.getElementById('root'),
 );
   registerServiceWorker();
@@ -26,22 +24,6 @@ const render = Component => {
 
 store.subscribe(() => {
   console.log(store.getState())
-});
-
-store.dispatch({
-  type: "ADD",
-  payload: 30
-});
-
-
-store.dispatch({
-  type: "SUBTRACT",
-  payload: 12
-});
-
-store.dispatch({
-  type: "NEW_SONG",
-  payload: "Meteora"
 });
 
 render(App);

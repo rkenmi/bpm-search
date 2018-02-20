@@ -5,16 +5,23 @@ import {connect} from "react-redux";
 import {Container, Grid} from 'semantic-ui-react'
 import MenuExampleLabeledIconsVertical from './Menu';
 import store from "../stores";
+import PropTypes from 'prop-types';
 
 class Main extends Component {
-  _renderLogin() {
+  static propTypes = {
+    children: PropTypes.element,
+  };
+
+  _render() {
     if (!this.props.auth.authorized) {
       return (
         <Login/>
       );
+    } else if (this.props.children) {
+      return this.props.children;
     } else {
       return (
-        <p>Hey, you're logged in!</p>
+        <p>Blank page</p>
       );
     }
   }
@@ -22,22 +29,22 @@ class Main extends Component {
   render() {
     return (
       <span>
-            <Grid>
-              <Grid.Row>
-                  <Grid.Column width={3}>
-                    <MenuExampleLabeledIconsVertical/>
-                  </Grid.Column>
-                  <Grid.Column width={10}>
-                    <Container text>
-                      <h1>CarZ</h1>
-                      <span className="App">
-                        {this._renderLogin()}
-                      </span>
-                    </Container>
-                  </Grid.Column>
-              </Grid.Row>
-            </Grid>
-          </span>
+        <Grid>
+          <Grid.Row>
+              <Grid.Column width={3}>
+                <MenuExampleLabeledIconsVertical/>
+              </Grid.Column>
+              <Grid.Column width={10}>
+                <Container text>
+                  <h1>CarZ</h1>
+                  <span className="App">
+                    {this._render()}
+                  </span>
+                </Container>
+              </Grid.Column>
+          </Grid.Row>
+        </Grid>
+      </span>
     );
   }
 }
