@@ -2,22 +2,25 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './css/index.css';
 import 'semantic-ui-css/semantic.min.css';
-import App from './containers/App';
+import {App} from './containers/App';
 import registerServiceWorker from './registerServiceWorker';
 import { AppContainer } from 'react-hot-loader';
 import { Provider } from 'react-redux';
 import store from './stores';
+import {BrowserRouter} from "react-router-dom";
 
 const render = Component => {
 
   ReactDOM.render(
-    <Provider store={store}>
-      <AppContainer>
-        <Component />
-      </AppContainer>
-    </Provider>,
-    document.getElementById('root'),
-  );
+    <BrowserRouter>
+      <Provider store={store}>
+        <AppContainer>
+          <Component />
+        </AppContainer>
+      </Provider>
+    </BrowserRouter>,
+  document.getElementById('root'),
+);
   registerServiceWorker();
 };
 

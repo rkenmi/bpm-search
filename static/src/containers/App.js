@@ -1,65 +1,19 @@
-import React, { Component } from 'react';
-import logo from '../svg/logo.svg';
+import React, {Component} from 'react';
 import '../css/App.css';
-import { Container, Grid } from 'semantic-ui-react'
+import {Container, Grid} from 'semantic-ui-react'
 import MenuExampleLabeledIconsVertical from './Menu';
-import Login from './Login';
-import { connect } from 'react-redux';
-import { setSong, setAuthToken} from "../actions/authActions";
+import {connect} from 'react-redux';
+import {setAuthToken} from "../actions/authActions";
 import store from "../stores";
+import {Link, Route, Switch} from "react-router-dom";
+import Main from "./Main";
 
-class App extends Component {
-
-  _renderLogin() {
-    if (!this.props.auth.authorized) {
-      return (
-        <Login/>
-      );
-    } else {
-      return (
-        <p>Hey, you're logged in!</p>
-      );
-    }
-  }
-
-  render() {
-    let loginUrl = `/api`;
-    const state = store.getState();
-    return (
-      <span>
-        <Grid>
-          <Grid.Row>
-              <Grid.Column width={3}>
-                <MenuExampleLabeledIconsVertical/>
-              </Grid.Column>
-              <Grid.Column width={10}>
-                <Container text>
-                  <h1>CarZ</h1>
-                  <span className="App">
-                    {this._renderLogin()}
-                  </span>
-                </Container>
-              </Grid.Column>
-          </Grid.Row>
-        </Grid>
-      </span>
-    );
-  }
-}
-
-const mapStateToProps = (state) => {
-  return {
-    auth: state.authReducer,
-  }
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    setAuthToken: (token) => {
-      dispatch(setAuthToken(token));
-    }
-  }
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export const App = () => (
+  <div>
+    <Switch>
+      <Route exact path="/" component={Main}/>
+      <Route path="/login" component={Main}/>
+    </Switch>
+  </div>
+);
 
