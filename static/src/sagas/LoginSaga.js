@@ -1,8 +1,8 @@
 import {call, put, takeEvery} from 'redux-saga/effects';
-import {login} from "../util/Auth";
 import {AUTH, DEV_URL} from "../config/Api";
 import axios from 'axios';
 import {setAuthToken} from "../actions/authActions";
+import {LOGIN} from "../actions/types";
 
 export function InvalidCredentialsException(message) {
   this.message = message;
@@ -11,20 +11,26 @@ export function InvalidCredentialsException(message) {
 
 function* _login(action) {
   const {username, password} = action.payload;
-  yield call(login, username, password);
 
-  const res = yield call([axios, axios.post], DEV_URL + AUTH, {
+  try {
+    const res = yield call([axios, axios.post], DEV_URL + AUTH, {
       username,
       password
     });
 
-  if (res.status === 200) {
-    yield put(setAuthToken(res.data.key));
+    if (res.status === 200) {
+      yield put(setAuthToken(res.data.key));
+    }
+
+    console.log(res);
+  } catch (e) {
+    console.error(e);
   }
+
 }
 
 function* LoginSaga(username, password) {
-  yield takeEvery("LOGIN", _login);
+  yield takeEvery(LOGIN, _login);
 }
 
 export default LoginSaga;

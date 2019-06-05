@@ -57,11 +57,11 @@ class Login extends Component {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onLogin: (user, password) => {
+    onLogin: (username, password) => {
       dispatch({
         type: LOGIN,
         payload: {
-          user,
+          username,
           password,
         }});
     }
