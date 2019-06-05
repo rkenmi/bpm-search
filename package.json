@@ -43,6 +43,7 @@
     "react-tap-event-plugin": "^3.0.2",
     "redux": "^3.7.2",
     "redux-logger": "^3.0.6",
+    "redux-saga": "^1.0.2",
     "semantic-ui-css": "^2.2.12",
     "semantic-ui-react": "^0.75.1",
     "style-loader": "0.18.2",
