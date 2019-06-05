@@ -1,6 +1,8 @@
-import React, { Component } from 'react'
-import { Button, Form, Message } from 'semantic-ui-react'
-import {isLoggedIn, login} from "../util/Auth";
+import React, {Component} from 'react'
+import { connect } from 'react-redux';
+import {Button, Form, Message} from 'semantic-ui-react'
+import {login} from "../util/Auth";
+import {LOGIN} from "../actions/types";
 
 class Login extends Component {
   constructor(props){
@@ -31,8 +33,10 @@ class Login extends Component {
 
   handleSubmit(e){
     e.preventDefault();
+    const {user, password} = this.state;
 
-    login.call(this, this.state.user, this.state.password);
+    // login.call(this, this.state.user, this.state.password);
+    this.props.onLogin(user, password);
   }
 
   render(){
@@ -51,5 +55,17 @@ class Login extends Component {
 
 }
 
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onLogin: (user, password) => {
+      dispatch({
+        type: LOGIN,
+        payload: {
+          user,
+          password,
+        }});
+    }
+  }
+}
 
-export default Login;
+export default connect(null, mapDispatchToProps)(Login);

@@ -7,8 +7,8 @@ import Main from "./Main";
 const App = () => (
   <BrowserRouter>
     <div>
-        <Route exact path="/" component={Main}/>
-        <Route path="/foobar" component={Foobar}/>
+      <Route exact path="/" component={Main}/>
+      <Route path="/foobar" component={Foobar}/>
     </div>
   </BrowserRouter>
 );

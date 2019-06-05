@@ -1,4 +1,4 @@
-import { Component } from 'react'
+import {Component} from 'react'
 import menuComponent from "../components/menuComponent";
 
 export default class MenuExampleLabeledIconsVertical extends Component {

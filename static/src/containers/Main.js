@@ -4,7 +4,6 @@ import {setAuthToken} from "../actions/authActions";
 import {connect} from "react-redux";
 import {Container, Grid} from 'semantic-ui-react'
 import MenuExampleLabeledIconsVertical from './Menu';
-import store from "../stores";
 import PropTypes from 'prop-types';
 
 class Main extends Component {
