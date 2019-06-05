@@ -1,7 +1,7 @@
 import {call, put, takeEvery} from 'redux-saga/effects';
 import {AUTH, DEV_URL} from "../config/Api";
 import axios from 'axios';
-import {setAuthToken} from "../actions/authActions";
+import {loginFailure, setAuthToken} from "../actions/authActions";
 import {LOGIN} from "../actions/types";
 
 export function InvalidCredentialsException(message) {
@@ -25,6 +25,7 @@ function* _login(action) {
     console.log(res);
   } catch (e) {
     console.error(e);
+    yield put(loginFailure(e.response.statusText));
   }
 
 }

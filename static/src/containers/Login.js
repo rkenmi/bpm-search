@@ -1,7 +1,6 @@
 import React, {Component} from 'react'
 import { connect } from 'react-redux';
 import {Button, Form, Message} from 'semantic-ui-react'
-import {login} from "../util/Auth";
 import {LOGIN} from "../actions/types";
 
 class Login extends Component {
@@ -17,12 +16,14 @@ class Login extends Component {
   }
 
   renderError(){
-    if (!this.state.error) return (<div></div>);
+    const {error} = this.props;
+
+    if (!error) return (<div></div>);
     return (
       <Message
         error
         header='Action Forbidden'
-        content={this.state.error}
+        content={error}
       />
     );
   }
@@ -66,6 +67,10 @@ const mapDispatchToProps = (dispatch) => {
         }});
     }
   }
-}
+};
 
-export default connect(null, mapDispatchToProps)(Login);
+const mapStateToProps = (state) => ({
+  error: state.authReducer.error
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);
