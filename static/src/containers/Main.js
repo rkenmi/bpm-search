@@ -35,7 +35,7 @@ class Main extends Component {
               </Grid.Column>
               <Grid.Column width={10}>
                 <Container text>
-                  <h1>CarZ</h1>
+                  <h1>Page</h1>
                   <span className="App">
                     {this._render()}
                   </span>

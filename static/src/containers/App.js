@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import '../css/App.css';
 import {BrowserRouter, Link, Route, Switch} from "react-router-dom";
 import Main from "./Main";
+import TrackSearch from './TrackSearch';
 
 // const history = syncHistoryWithStore(browserHistory, store);
 const App = () => (
@@ -9,6 +10,7 @@ const App = () => (
     <div>
       <Route exact path="/" component={Main}/>
       <Route path="/foobar" component={Foobar}/>
+      <Route path="/search" component={TrackSearch}/>
     </div>
   </BrowserRouter>
 );

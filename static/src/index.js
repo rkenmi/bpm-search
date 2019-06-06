@@ -6,7 +6,6 @@ import registerServiceWorker from './registerServiceWorker';
 import {AppContainer} from 'react-hot-loader';
 import {Provider} from 'react-redux';
 import store from './stores';
-import {BrowserRouter} from "react-router-dom";
 import App from "./containers/App";
 
 const render = Component => {

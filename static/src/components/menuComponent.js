@@ -19,10 +19,12 @@ export default (activeItem) => {
         </Menu.Item>
       </Link>
 
-      <Menu.Item name='video play' active={activeItem === 'video play'} onClick={this.handleItemClick}>
-        <Icon name='video play' />
-        Videos
-      </Menu.Item>
+      <Link to='/search'>
+        <Menu.Item name='search' active={activeItem === 'search'} onClick={this.handleItemClick}>
+          <Icon name='video camera' />
+          Search
+        </Menu.Item>
+      </Link>
     </Menu>
   );
 }
