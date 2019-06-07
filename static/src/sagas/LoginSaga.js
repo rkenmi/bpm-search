@@ -9,6 +9,9 @@ export function InvalidCredentialsException(message) {
   this.name = 'InvalidCredentialsException';
 }
 
+axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
+axios.defaults.xsrfCookieName = "csrftoken";
+
 function* _login(action) {
   const {username, password} = action.payload;
 
@@ -30,7 +33,7 @@ function* _login(action) {
 
 }
 
-function* LoginSaga(username, password) {
+function* LoginSaga() {
   yield takeEvery(LOGIN, _login);
 }
 
