@@ -1,9 +1,8 @@
 import React, {Component} from 'react';
 import _ from 'lodash'
-import {setAuthToken} from "../actions/authActions";
 import {connect} from "react-redux";
 import {Container, Grid, Header, Search, Segment} from 'semantic-ui-react'
-import PropTypes from 'prop-types';
+import {LinksNav} from "../components/HorizontalMenu";
 
 const initialState = { isLoading: false, results: [], value: '' }
 const source = _.times(1, () => ({
@@ -38,51 +37,35 @@ class TrackSearch extends Component {
     const { isLoading, value, results } = this.state
 
     return (
-      <span>
+      <Container>
+        <LinksNav/>
         <Grid>
-          <Grid.Row>
-              <Grid.Column width={3}>
-              </Grid.Column>
-              <Grid.Column width={10}>
-                <Container text>
-                  <h1>Page</h1>
-                  <span className="App">
-                    {this._render()}
-                  </span>
-                </Container>
-              </Grid.Column>
-          </Grid.Row>
-        </Grid>
-      </span>
-    );
-
-    return (
-      <Grid>
-        <Grid.Column width={6}>
-          <Search
-            loading={isLoading}
-            onResultSelect={this.handleResultSelect}
-            onSearchChange={_.debounce(this.handleSearchChange, 500, {
-              leading: true,
-            })}
-            results={results}
-            value={value}
-          />
-        </Grid.Column>
-        <Grid.Column width={10}>
-          <Segment>
-            <Header>State</Header>
-            <pre style={{ overflowX: 'auto' }}>
+          <Grid.Column width={6}>
+            <Search
+              loading={isLoading}
+              onResultSelect={this.handleResultSelect}
+              onSearchChange={_.debounce(this.handleSearchChange, 500, {
+                leading: true,
+              })}
+              results={results}
+              value={value}
+            />
+          </Grid.Column>
+          <Grid.Column width={10}>
+            <Segment>
+              <Header>State</Header>
+              <pre style={{ overflowX: 'auto' }}>
               {JSON.stringify(this.state, null, 2)}
             </pre>
-            <Header>Options</Header>
-            <pre style={{ overflowX: 'auto' }}>
+              <Header>Options</Header>
+              <pre style={{ overflowX: 'auto' }}>
               {JSON.stringify(source, null, 2)}
             </pre>
-          </Segment>
-        </Grid.Column>
-      </Grid>
-    )
+            </Segment>
+          </Grid.Column>
+        </Grid>
+      </Container>
+    );
   }
 }
 const mapStateToProps = (state) => {

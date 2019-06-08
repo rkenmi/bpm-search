@@ -2,8 +2,21 @@ import React, {Component} from 'react';
 import {Icon, Menu} from 'semantic-ui-react'
 import {Link} from "react-router-dom";
 
-export default class HorizontalMenu extends Component {
+export class LinksNav extends Component {
+  render() {
+    return (
+      <HorizontalMenu
+        entries={[
+          {name: 'home', text: 'Home', link: '/', onClick: () => {}},
+          {name: 'login', text: 'Login', link: '/login', onClick: () => {}},
+          {name: 'about', text: 'About', link: '/about', onClick: () => {}},
+        ]}
+      />
+    )
+  }
+}
 
+export class HorizontalMenu extends Component {
   constructor() {
     super();
     this.state = {
