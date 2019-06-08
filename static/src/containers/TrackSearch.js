@@ -6,7 +6,7 @@ import {Container, Grid, Header, Search, Segment} from 'semantic-ui-react'
 import PropTypes from 'prop-types';
 
 const initialState = { isLoading: false, results: [], value: '' }
-const source = _.times(5, () => ({
+const source = _.times(1, () => ({
   title: 'hi',
   description: 'description',
   image: '0',
@@ -14,10 +14,6 @@ const source = _.times(5, () => ({
 }));
 
 class TrackSearch extends Component {
-  static propTypes = {
-    children: PropTypes.element,
-  };
-
   state = initialState;
 
   handleResultSelect = (e, { result }) => this.setState({ value: result.title })
@@ -42,6 +38,25 @@ class TrackSearch extends Component {
     const { isLoading, value, results } = this.state
 
     return (
+      <span>
+        <Grid>
+          <Grid.Row>
+              <Grid.Column width={3}>
+              </Grid.Column>
+              <Grid.Column width={10}>
+                <Container text>
+                  <h1>Page</h1>
+                  <span className="App">
+                    {this._render()}
+                  </span>
+                </Container>
+              </Grid.Column>
+          </Grid.Row>
+        </Grid>
+      </span>
+    );
+
+    return (
       <Grid>
         <Grid.Column width={6}>
           <Search
@@ -52,7 +67,6 @@ class TrackSearch extends Component {
             })}
             results={results}
             value={value}
-            {...this.props}
           />
         </Grid.Column>
         <Grid.Column width={10}>
@@ -77,12 +91,4 @@ const mapStateToProps = (state) => {
   }
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    setAuthToken: (token) => {
-      dispatch(setAuthToken(token));
-    }
-  }
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(TrackSearch);
+export default connect(mapStateToProps, null)(TrackSearch);

@@ -3,8 +3,8 @@ import Login from "./Login";
 import {setAuthToken} from "../actions/authActions";
 import {connect} from "react-redux";
 import {Container, Grid} from 'semantic-ui-react'
-import MenuExampleLabeledIconsVertical from './Menu';
 import PropTypes from 'prop-types';
+import HorizontalMenu from "../components/HorizontalMenu";
 
 class Main extends Component {
   static propTypes = {
@@ -27,23 +27,29 @@ class Main extends Component {
 
   render() {
     return (
-      <span>
+      <Container>
+        <HorizontalMenu
+          entries={[
+            {name: 'home', text: 'Home', link: '/', onClick: () => {}},
+            {name: 'login', text: 'Login', link: '/login', onClick: () => {}},
+            {name: 'about', text: 'About', link: '/about', onClick: () => {}},
+          ]}
+        />
         <Grid>
           <Grid.Row>
-              <Grid.Column width={3}>
-                <MenuExampleLabeledIconsVertical/>
-              </Grid.Column>
-              <Grid.Column width={10}>
-                <Container text>
-                  <h1>Page</h1>
-                  <span className="App">
-                    {this._render()}
-                  </span>
-                </Container>
-              </Grid.Column>
+            <Grid.Column width={3}>
+            </Grid.Column>
+            <Grid.Column width={10}>
+              <Container text>
+                <h1>Page</h1>
+                <span className="App">
+                      {this._render()}
+                    </span>
+              </Container>
+            </Grid.Column>
           </Grid.Row>
         </Grid>
-      </span>
+      </Container>
     );
   }
 }
