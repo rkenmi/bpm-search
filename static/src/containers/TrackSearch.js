@@ -10,7 +10,7 @@ import {
   Header,
   Icon,
   Image,
-  Input,
+  Input, List,
   Modal,
   Search,
   Segment
@@ -46,6 +46,14 @@ class TrackSearch extends Component {
     }, 300)
   }
 
+  static defaultProps = {
+    tracks: [
+      {name: 'Time is running out', artist: 'Muse'},
+      {name: 'Starlight', artist: 'Muse'},
+      {name: 'Children', artist: 'Robert Miles'},
+    ]
+  };
+
   parseNumber = (value) => {
     let number;
     if (value === '' || isNaN(parseInt(value, 10))) {
@@ -58,6 +66,7 @@ class TrackSearch extends Component {
   };
 
   render() {
+    const { tracks } = this.props;
     const { isLoading, value, results, minBPM, maxBPM} = this.state;
 
     return (
@@ -66,48 +75,64 @@ class TrackSearch extends Component {
           <LinksNav/>
           <Grid>
             <Grid.Column>
-              <Grid.Row>
-                <Form>
-                  <Form.Group>
-                    <div style={{display: 'flex', flex: 0.5, justifyContent: 'space-around'}}>
-                      <Form.Input
-                        as={FormField}
-                        label={'Minimum BPM'}
-                        min={20}
-                        max={500}
-                        maxLength={3}
-                        onChange={(e, {value}) => {
-                          this.setState({minBPM: this.parseNumber(value)});
-                        }}
-                        placeholder={'20'}
-                        value={minBPM}
-                      />
-                      <Form.Input
-                        as={FormField}
-                        label={'Minimum BPM'}
-                        min={20}
-                        max={500}
-                        maxLength={3}
-                        onChange={(e, {value}) => {
-                          this.setState({maxBPM: this.parseNumber(value)});
-                        }}
-                        placeholder={'150'}
-                        value={maxBPM}
-                      />
-                      <div style={{display: 'flex', alignItems: 'flex-end'}}>
-                        <Form.Button
-                          icon
-                          labelPosition={'right'}
-                          disabled={!minBPM || !maxBPM || minBPM < 20 || maxBPM > 500 || maxBPM < minBPM}
-                        >
-                          <Icon name={'search'} />
-                          Search
-                        </Form.Button>
+              <Segment>
+                <Grid.Row>
+                  <Form>
+                    <Form.Group>
+                      <div style={{display: 'flex', flex: 0.5, justifyContent: 'space-around'}}>
+                        <Form.Input
+                          as={FormField}
+                          label={'Minimum BPM'}
+                          min={20}
+                          max={500}
+                          maxLength={3}
+                          onChange={(e, {value}) => {
+                            this.setState({minBPM: this.parseNumber(value)});
+                          }}
+                          placeholder={'20'}
+                          value={minBPM}
+                        />
+                        <Form.Input
+                          as={FormField}
+                          label={'Minimum BPM'}
+                          min={20}
+                          max={500}
+                          maxLength={3}
+                          onChange={(e, {value}) => {
+                            this.setState({maxBPM: this.parseNumber(value)});
+                          }}
+                          placeholder={'150'}
+                          value={maxBPM}
+                        />
+                        <div style={{display: 'flex', alignItems: 'flex-end'}}>
+                          <Form.Button
+                            icon
+                            labelPosition={'right'}
+                            disabled={!minBPM || !maxBPM || minBPM < 20 || maxBPM > 500 || maxBPM < minBPM}
+                          >
+                            <Icon name={'search'} />
+                            Search
+                          </Form.Button>
+                        </div>
                       </div>
-                    </div>
-                  </Form.Group>
-                </Form>
-              </Grid.Row>
+                    </Form.Group>
+                  </Form>
+                </Grid.Row>
+              </Segment>
+              <Segment>
+                <Grid.Row>
+                  <div style={{display: 'flex', justifyContent: 'flex-start'}}>
+                    <List>
+                      {tracks.map((song) => {
+                        return (
+                          <List.Item>{song.name}</List.Item>
+                        )
+                      })}
+                    </List>
+                  </div>
+                </Grid.Row>
+              </Segment>
+
             </Grid.Column>
           </Grid>
         </Segment>
