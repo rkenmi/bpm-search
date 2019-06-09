@@ -7,8 +7,8 @@ export class LinksNav extends Component {
     return (
       <HorizontalMenu
         entries={[
-          {name: 'home', text: 'Home', link: '/', onClick: () => {}},
           {name: 'login', text: 'Login', link: '/login', onClick: () => {}},
+          {name: 'filter', text: 'Filter By BPM', link: '/filter', onClick: () => {}},
           {name: 'about', text: 'About', link: '/about', onClick: () => {}},
         ]}
       />
@@ -38,7 +38,7 @@ export class HorizontalMenu extends Component {
     const {entries} = this.props;
     const {activeItem} = this.state;
 
-    return entries.map((entry) =>
+    let menuEntries = entries.map((entry) =>
       <Menu.Item
         key={entry.link}
         as={Link}
@@ -55,6 +55,8 @@ export class HorizontalMenu extends Component {
         {entry.text}
       </Menu.Item>
     );
+
+    return [<Menu.Item header key={'home'} as={Link} to={'/'}><h3>BPM Search</h3></Menu.Item>].concat(menuEntries);
   }
 
   render() {
