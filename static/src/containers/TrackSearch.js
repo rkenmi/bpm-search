@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
 import _ from 'lodash'
 import {connect} from "react-redux";
-import {Container, Grid, Header, Search, Segment} from 'semantic-ui-react'
+import {Button, Container, Form, FormField, Grid, Header, Image, Input, Modal, Search, Segment} from 'semantic-ui-react'
 import {LinksNav} from "../components/HorizontalMenu";
 
-const initialState = { isLoading: false, results: [], value: '' }
+const initialState = { isLoading: false, results: [], value: '', minBPM: '', maxBPM: ''};
 const source = _.times(1, () => ({
   title: 'hi',
   description: 'description',
@@ -33,37 +33,63 @@ class TrackSearch extends Component {
     }, 300)
   }
 
+  parseNumber = (value) => {
+    let number;
+    if (value === '' || isNaN(parseInt(value, 10))) {
+      number = '';
+    } else {
+      number = parseInt(value, 10);
+    }
+
+    return number;
+  };
+
   render() {
-    const { isLoading, value, results } = this.state
+    const { isLoading, value, results, minBPM, maxBPM} = this.state;
 
     return (
       <Container>
         <LinksNav/>
-        <Grid>
-          <Grid.Column width={6}>
-            <Search
-              loading={isLoading}
-              onResultSelect={this.handleResultSelect}
-              onSearchChange={_.debounce(this.handleSearchChange, 500, {
-                leading: true,
-              })}
-              results={results}
-              value={value}
-            />
-          </Grid.Column>
-          <Grid.Column width={10}>
-            <Segment>
-              <Header>State</Header>
-              <pre style={{ overflowX: 'auto' }}>
-              {JSON.stringify(this.state, null, 2)}
-            </pre>
-              <Header>Options</Header>
-              <pre style={{ overflowX: 'auto' }}>
-              {JSON.stringify(source, null, 2)}
-            </pre>
-            </Segment>
-          </Grid.Column>
-        </Grid>
+        <Header as={'h1'} textAlign={'center'}>BPM Search</Header>
+        <Segment basic={true}>
+          <Form>
+            <Grid centered={true} columns={4} relaxed={'very'}>
+              <Grid.Column verticalAlign={'middle'}>
+                Minimum BPM
+                <Form.Input
+                  as={FormField}
+                  inline
+                  min={20}
+                  max={500}
+                  maxLength={3}
+                  onChange={(e, {value}) => {
+                    this.setState({minBPM: this.parseNumber(value)});
+                  }}
+                  placeholder={'20'}
+                  value={minBPM}
+                />
+              </Grid.Column>
+              <Grid.Column verticalAlign={'middle'}>
+                Maximum BPM
+                <Form.Input
+                  as={FormField}
+                  inline
+                  min={20}
+                  max={500}
+                  maxLength={3}
+                  onChange={(e, {value}) => {
+                    this.setState({maxBPM: this.parseNumber(value)});
+                  }}
+                  placeholder={'150'}
+                  value={maxBPM}
+                />
+              </Grid.Column>
+            </Grid>
+            <Grid fluid={true} centered={true} relaxed={'very'}>
+              <Button disabled={!minBPM || !maxBPM || maxBPM < minBPM} size={'large'}>Search</Button>
+            </Grid>
+          </Form>
+        </Segment>
       </Container>
     );
   }
