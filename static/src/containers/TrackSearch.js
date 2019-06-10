@@ -99,7 +99,7 @@ class TrackSearch extends Component {
 
     return (
       <Container>
-        <Segment>
+        <Segment basic>
           <LinksNav/>
           <Segment>
             <Form>

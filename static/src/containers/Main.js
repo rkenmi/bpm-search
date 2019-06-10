@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import Login from "./Login";
 import {setAuthToken} from "../actions/authActions";
 import {connect} from "react-redux";
-import {Container, Grid} from 'semantic-ui-react'
+import {Container, Form, Grid, Segment} from 'semantic-ui-react'
 import PropTypes from 'prop-types';
 import HorizontalMenu, {LinksNav} from "../components/HorizontalMenu";
 
@@ -28,21 +28,23 @@ class Main extends Component {
   render() {
     return (
       <Container>
-        <LinksNav/>
-        <Grid>
-          <Grid.Row>
-            <Grid.Column width={3}>
-            </Grid.Column>
-            <Grid.Column width={10}>
-              <Container text>
-                <h1>Page</h1>
-                <span className="App">
+        <Segment basic>
+          <LinksNav/>
+          <Grid>
+            <Grid.Row>
+              <Grid.Column width={3}>
+              </Grid.Column>
+              <Grid.Column width={10}>
+                <Container text>
+                  <h1>Page</h1>
+                  <span className="App">
                       {this._render()}
                     </span>
-              </Container>
-            </Grid.Column>
-          </Grid.Row>
-        </Grid>
+                </Container>
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
+        </Segment>
       </Container>
     );
   }
