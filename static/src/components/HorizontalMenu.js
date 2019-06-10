@@ -8,7 +8,7 @@ export class LinksNav extends Component {
       <HorizontalMenu
         entries={[
           {name: 'login', text: 'Login', link: '/login', onClick: () => {}},
-          {name: 'filter', text: 'Filter By BPM', link: '/filter', onClick: () => {}},
+          // {name: 'trackSearch', text: 'Track Search', link: '/trackSearch', onClick: () => {}},
           {name: 'about', text: 'About', link: '/about', onClick: () => {}},
         ]}
       />

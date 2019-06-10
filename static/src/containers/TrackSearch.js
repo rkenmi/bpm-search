@@ -13,7 +13,7 @@ import {
   Input, List,
   Modal,
   Search,
-  Segment
+  Segment, Table
 } from 'semantic-ui-react'
 import {LinksNav} from "../components/HorizontalMenu";
 
@@ -48,9 +48,9 @@ class TrackSearch extends Component {
 
   static defaultProps = {
     tracks: [
-      {name: 'Time is running out', artist: 'Muse'},
-      {name: 'Starlight', artist: 'Muse'},
-      {name: 'Children', artist: 'Robert Miles'},
+      {name: 'Time is running out', artist: 'Muse', bpm: 'X'},
+      {name: 'Starlight', artist: 'Muse', bpm: 'Y'},
+      {name: 'Children', artist: 'Robert Miles', bpm: 'Z'},
     ]
   };
 
@@ -65,8 +65,36 @@ class TrackSearch extends Component {
     return number;
   };
 
+  renderSearchResults() {
+    const {tracks} = this.props;
+
+    return (
+      <div style={{display: 'flex', justifyContent: 'flex-start'}}>
+        <Table>
+          <Table.Header>
+            <Table.Row>
+              <Table.HeaderCell>Track Title</Table.HeaderCell>
+              <Table.HeaderCell>Artist</Table.HeaderCell>
+              <Table.HeaderCell>BPM</Table.HeaderCell>
+            </Table.Row>
+          </Table.Header>
+          <Table.Body>
+            {tracks.map((song) => {
+              return (
+                <Table.Row key={song.name}>
+                  <Table.Cell>{song.name}</Table.Cell>
+                  <Table.Cell>{song.artist}</Table.Cell>
+                  <Table.Cell>{song.bpm}</Table.Cell>
+                </Table.Row>
+              )
+            })}
+          </Table.Body>
+        </Table>
+      </div>
+    )
+  }
+
   render() {
-    const { tracks } = this.props;
     const { isLoading, value, results, minBPM, maxBPM} = this.state;
 
     return (
@@ -119,20 +147,7 @@ class TrackSearch extends Component {
                   </Form>
                 </Grid.Row>
               </Segment>
-              <Segment>
-                <Grid.Row>
-                  <div style={{display: 'flex', justifyContent: 'flex-start'}}>
-                    <List>
-                      {tracks.map((song) => {
-                        return (
-                          <List.Item>{song.name}</List.Item>
-                        )
-                      })}
-                    </List>
-                  </div>
-                </Grid.Row>
-              </Segment>
-
+              {this.renderSearchResults()}
             </Grid.Column>
           </Grid>
         </Segment>
