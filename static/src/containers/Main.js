@@ -5,6 +5,7 @@ import {connect} from "react-redux";
 import {Container, Form, Grid, Segment} from 'semantic-ui-react'
 import PropTypes from 'prop-types';
 import HorizontalMenu, {LinksNav} from "../components/HorizontalMenu";
+import {Content} from '../components/Content';
 
 class Main extends Component {
   static propTypes = {
@@ -27,25 +28,22 @@ class Main extends Component {
 
   render() {
     return (
-      <Container>
-        <Segment basic>
-          <LinksNav/>
-          <Grid>
-            <Grid.Row>
-              <Grid.Column width={3}>
-              </Grid.Column>
-              <Grid.Column width={10}>
-                <Container text>
-                  <h1>Page</h1>
-                  <span className="App">
+      <Content>
+        <Grid>
+          <Grid.Row>
+            <Grid.Column width={3}>
+            </Grid.Column>
+            <Grid.Column width={10}>
+              <Container text>
+                <h1>Page</h1>
+                <span className="App">
                       {this._render()}
                     </span>
-                </Container>
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
-        </Segment>
-      </Container>
+              </Container>
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
+      </Content>
     );
   }
 }

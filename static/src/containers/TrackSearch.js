@@ -2,49 +2,17 @@ import React, {Component} from 'react';
 import _ from 'lodash'
 import {connect} from "react-redux";
 import {
-  Button,
-  Container,
   Form,
   FormField,
-  Grid,
-  Header,
   Icon,
-  Image,
-  Input, List,
-  Modal,
-  Search,
   Segment, Table
 } from 'semantic-ui-react'
-import {LinksNav} from "../components/HorizontalMenu";
+import {Content} from '../components/Content';
 
 const initialState = { isLoading: false, results: [], value: '', minBPM: '', maxBPM: ''};
-const source = _.times(1, () => ({
-  title: 'hi',
-  description: 'description',
-  image: '0',
-  price: '1.32'
-}));
 
 class TrackSearch extends Component {
   state = initialState;
-
-  handleResultSelect = (e, { result }) => this.setState({ value: result.title })
-
-  handleSearchChange = (e, { value }) => {
-    this.setState({ isLoading: true, value });
-
-    setTimeout(() => {
-      if (this.state.value.length < 1) return this.setState(initialState)
-
-      const re = new RegExp(_.escapeRegExp(this.state.value), 'i')
-      const isMatch = result => re.test(result.title)
-
-      this.setState({
-        isLoading: false,
-        results: _.filter(source, isMatch),
-      })
-    }, 300)
-  }
 
   static defaultProps = {
     tracks: [
@@ -65,7 +33,56 @@ class TrackSearch extends Component {
     return number;
   };
 
-  renderSearchResults() {
+  renderFilterByBPMSearch() {
+    const { minBPM, maxBPM} = this.state;
+
+    return (
+      <Segment>
+        <Form>
+          <Form.Group>
+            <div style={{display: 'flex', flex: 0.5, justifyContent: 'space-around'}}>
+              <Form.Input
+                as={FormField}
+                label={'Minimum BPM'}
+                min={20}
+                max={500}
+                maxLength={3}
+                onChange={(e, {value}) => {
+                  this.setState({minBPM: this.parseNumber(value)});
+                }}
+                placeholder={'20'}
+                value={minBPM}
+              />
+              <Form.Input
+                as={FormField}
+                label={'Minimum BPM'}
+                min={20}
+                max={500}
+                maxLength={3}
+                onChange={(e, {value}) => {
+                  this.setState({maxBPM: this.parseNumber(value)});
+                }}
+                placeholder={'150'}
+                value={maxBPM}
+              />
+              <div style={{display: 'flex', alignItems: 'flex-end'}}>
+                <Form.Button
+                  icon
+                  labelPosition={'right'}
+                  disabled={!minBPM || !maxBPM || minBPM < 20 || maxBPM > 500 || maxBPM < minBPM}
+                >
+                  <Icon name={'search'} />
+                  Search
+                </Form.Button>
+              </div>
+            </div>
+          </Form.Group>
+        </Form>
+      </Segment>
+    )
+  }
+
+  renderResults() {
     const {tracks} = this.props;
 
     return (
@@ -95,57 +112,11 @@ class TrackSearch extends Component {
   }
 
   render() {
-    const { isLoading, value, results, minBPM, maxBPM} = this.state;
-
     return (
-      <Container>
-        <Segment basic>
-          <LinksNav/>
-          <Segment>
-            <Form>
-              <Form.Group>
-                <div style={{display: 'flex', flex: 0.5, justifyContent: 'space-around'}}>
-                  <Form.Input
-                    as={FormField}
-                    label={'Minimum BPM'}
-                    min={20}
-                    max={500}
-                    maxLength={3}
-                    onChange={(e, {value}) => {
-                      this.setState({minBPM: this.parseNumber(value)});
-                    }}
-                    placeholder={'20'}
-                    value={minBPM}
-                  />
-                  <Form.Input
-                    as={FormField}
-                    label={'Minimum BPM'}
-                    min={20}
-                    max={500}
-                    maxLength={3}
-                    onChange={(e, {value}) => {
-                      this.setState({maxBPM: this.parseNumber(value)});
-                    }}
-                    placeholder={'150'}
-                    value={maxBPM}
-                  />
-                  <div style={{display: 'flex', alignItems: 'flex-end'}}>
-                    <Form.Button
-                      icon
-                      labelPosition={'right'}
-                      disabled={!minBPM || !maxBPM || minBPM < 20 || maxBPM > 500 || maxBPM < minBPM}
-                    >
-                      <Icon name={'search'} />
-                      Search
-                    </Form.Button>
-                  </div>
-                </div>
-              </Form.Group>
-            </Form>
-          </Segment>
-          {this.renderSearchResults()}
-        </Segment>
-      </Container>
+      <Content>
+        {this.renderFilterByBPMSearch()}
+        {this.renderResults()}
+      </Content>
     );
   }
 }
