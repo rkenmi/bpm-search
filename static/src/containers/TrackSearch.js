@@ -101,55 +101,49 @@ class TrackSearch extends Component {
       <Container>
         <Segment>
           <LinksNav/>
-          <Grid>
-            <Grid.Column>
-              <Segment>
-                <Grid.Row>
-                  <Form>
-                    <Form.Group>
-                      <div style={{display: 'flex', flex: 0.5, justifyContent: 'space-around'}}>
-                        <Form.Input
-                          as={FormField}
-                          label={'Minimum BPM'}
-                          min={20}
-                          max={500}
-                          maxLength={3}
-                          onChange={(e, {value}) => {
-                            this.setState({minBPM: this.parseNumber(value)});
-                          }}
-                          placeholder={'20'}
-                          value={minBPM}
-                        />
-                        <Form.Input
-                          as={FormField}
-                          label={'Minimum BPM'}
-                          min={20}
-                          max={500}
-                          maxLength={3}
-                          onChange={(e, {value}) => {
-                            this.setState({maxBPM: this.parseNumber(value)});
-                          }}
-                          placeholder={'150'}
-                          value={maxBPM}
-                        />
-                        <div style={{display: 'flex', alignItems: 'flex-end'}}>
-                          <Form.Button
-                            icon
-                            labelPosition={'right'}
-                            disabled={!minBPM || !maxBPM || minBPM < 20 || maxBPM > 500 || maxBPM < minBPM}
-                          >
-                            <Icon name={'search'} />
-                            Search
-                          </Form.Button>
-                        </div>
-                      </div>
-                    </Form.Group>
-                  </Form>
-                </Grid.Row>
-              </Segment>
-              {this.renderSearchResults()}
-            </Grid.Column>
-          </Grid>
+          <Segment>
+            <Form>
+              <Form.Group>
+                <div style={{display: 'flex', flex: 0.5, justifyContent: 'space-around'}}>
+                  <Form.Input
+                    as={FormField}
+                    label={'Minimum BPM'}
+                    min={20}
+                    max={500}
+                    maxLength={3}
+                    onChange={(e, {value}) => {
+                      this.setState({minBPM: this.parseNumber(value)});
+                    }}
+                    placeholder={'20'}
+                    value={minBPM}
+                  />
+                  <Form.Input
+                    as={FormField}
+                    label={'Minimum BPM'}
+                    min={20}
+                    max={500}
+                    maxLength={3}
+                    onChange={(e, {value}) => {
+                      this.setState({maxBPM: this.parseNumber(value)});
+                    }}
+                    placeholder={'150'}
+                    value={maxBPM}
+                  />
+                  <div style={{display: 'flex', alignItems: 'flex-end'}}>
+                    <Form.Button
+                      icon
+                      labelPosition={'right'}
+                      disabled={!minBPM || !maxBPM || minBPM < 20 || maxBPM > 500 || maxBPM < minBPM}
+                    >
+                      <Icon name={'search'} />
+                      Search
+                    </Form.Button>
+                  </div>
+                </div>
+              </Form.Group>
+            </Form>
+          </Segment>
+          {this.renderSearchResults()}
         </Segment>
       </Container>
     );
