@@ -1,16 +1,10 @@
 import os
 import csv
-from elasticsearch import Elasticsearch
-from elasticsearch import helpers
 from collections import namedtuple
 
 TrackTuple = namedtuple('Track', ['genre', 'artist_name', 'track_name', 'track_id', 'popularity', 'acousticness',
                              'danceability', 'duration_ms', 'energy', 'instrumentalness', 'key', 'liveness',
                              'loudness', 'mode', 'speechiness', 'tempo', 'time_signature', 'valence'])
-
-es = Elasticsearch(
-    'localhost'
-)
 
 # PYTHONIOENCODING=utf-8 python save.py
 def save():

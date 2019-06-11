@@ -8,6 +8,7 @@ import {
   Segment, Table
 } from 'semantic-ui-react'
 import {Content} from '../components/Content';
+import {filterByBPM} from "../actions/searchActions";
 
 const initialState = { isLoading: false, results: [], value: '', minBPM: '', maxBPM: ''};
 
@@ -15,10 +16,8 @@ class TrackSearch extends Component {
   state = initialState;
 
   static defaultProps = {
-    tracks: [
-      {name: 'Time is running out', artist: 'Muse', bpm: 'X'},
-      {name: 'Starlight', artist: 'Muse', bpm: 'Y'},
-      {name: 'Children', artist: 'Robert Miles', bpm: 'Z'},
+    exampleTracks: [
+      {track_name: 'Time is running out', artist_name: 'Muse', tempo: 'X', genre: 'Rock', track_id: 'A'},
     ]
   };
 
@@ -34,7 +33,7 @@ class TrackSearch extends Component {
   };
 
   renderFilterByBPMSearch() {
-    const { minBPM, maxBPM} = this.state;
+    const {minBPM, maxBPM} = this.state;
 
     return (
       <Segment>
@@ -69,6 +68,10 @@ class TrackSearch extends Component {
                 <Form.Button
                   icon
                   labelPosition={'right'}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    this.props.filterByBPM(minBPM, maxBPM);
+                  }}
                   disabled={!minBPM || !maxBPM || minBPM < 20 || maxBPM > 500 || maxBPM < minBPM}
                 >
                   <Icon name={'search'} />
@@ -82,26 +85,29 @@ class TrackSearch extends Component {
     )
   }
 
+
   renderResults() {
-    const {tracks} = this.props;
+    const {filteredResults} = this.props;
 
     return (
       <div style={{display: 'flex', justifyContent: 'flex-start'}}>
         <Table>
           <Table.Header>
             <Table.Row>
-              <Table.HeaderCell>Track Title</Table.HeaderCell>
               <Table.HeaderCell>Artist</Table.HeaderCell>
+              <Table.HeaderCell>Track Title</Table.HeaderCell>
               <Table.HeaderCell>BPM</Table.HeaderCell>
+              <Table.HeaderCell>Genre</Table.HeaderCell>
             </Table.Row>
           </Table.Header>
           <Table.Body>
-            {tracks.map((song) => {
+            {filteredResults.map((song) => {
               return (
-                <Table.Row key={song.name}>
-                  <Table.Cell>{song.name}</Table.Cell>
-                  <Table.Cell>{song.artist}</Table.Cell>
-                  <Table.Cell>{song.bpm}</Table.Cell>
+                <Table.Row key={song.track_id}>
+                  <Table.Cell>{song.artist_name}</Table.Cell>
+                  <Table.Cell>{song.track_name}</Table.Cell>
+                  <Table.Cell>{song.tempo}</Table.Cell>
+                  <Table.Cell>{song.genre}</Table.Cell>
                 </Table.Row>
               )
             })}
@@ -123,7 +129,16 @@ class TrackSearch extends Component {
 const mapStateToProps = (state) => {
   return {
     auth: state.authReducer,
+    filteredResults: state.searchReducer.results,
   }
 };
 
-export default connect(mapStateToProps, null)(TrackSearch);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    filterByBPM: (minBPM, maxBPM) => {
+      dispatch(filterByBPM(minBPM, maxBPM));
+    }
+  }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(TrackSearch);
