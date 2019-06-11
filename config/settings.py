@@ -48,12 +48,14 @@ THIRD_PARTY_APPS = (
     'rest_framework',
     'rest_framework.authtoken',
     'webpack_loader',
+    'django_elasticsearch_dsl',
+    'django_elasticsearch_dsl_drf',
 )
 
 LOCAL_APPS = (
     'project.core',
     'project.api',
-    'project.car',
+    'project.tracks',
 )
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS

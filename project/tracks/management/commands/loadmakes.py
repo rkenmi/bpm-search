@@ -5,7 +5,7 @@ from contextlib import closing
 import requests
 from django.core.management import BaseCommand
 
-from project.car.models import VehicleMake
+from project.tracks.models import VehicleMake
 
 
 class Command(BaseCommand):
