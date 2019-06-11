@@ -4,14 +4,13 @@ import {connect} from "react-redux";
 import {
   Form,
   FormField,
-  Icon,
+  Icon, Pagination,
   Segment, Table
 } from 'semantic-ui-react'
 import {Content} from '../components/Content';
 import {filterByBPM} from "../actions/searchActions";
 
 const initialState = { isLoading: false, results: [], value: '', minBPM: '', maxBPM: ''};
-
 class TrackSearch extends Component {
   state = initialState;
 
@@ -49,7 +48,7 @@ class TrackSearch extends Component {
                 onChange={(e, {value}) => {
                   this.setState({minBPM: this.parseNumber(value)});
                 }}
-                placeholder={'20'}
+                placeholder={'ex: 20'}
                 value={minBPM}
               />
               <Form.Input
@@ -61,7 +60,7 @@ class TrackSearch extends Component {
                 onChange={(e, {value}) => {
                   this.setState({maxBPM: this.parseNumber(value)});
                 }}
-                placeholder={'150'}
+                placeholder={'ex: 150'}
                 value={maxBPM}
               />
               <div style={{display: 'flex', alignItems: 'flex-end'}}>
@@ -87,7 +86,7 @@ class TrackSearch extends Component {
 
 
   renderResults() {
-    const {filteredResults} = this.props;
+    const {filteredResults, totalPages} = this.props;
 
     return (
       <div style={{display: 'flex', justifyContent: 'flex-start'}}>
@@ -130,13 +129,14 @@ const mapStateToProps = (state) => {
   return {
     auth: state.authReducer,
     filteredResults: state.searchReducer.results,
+    totalPages: state.searchReducer.totalPages,
   }
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    filterByBPM: (minBPM, maxBPM) => {
-      dispatch(filterByBPM(minBPM, maxBPM));
+    filterByBPM: (minBPM, maxBPM, page=1) => {
+      dispatch(filterByBPM(minBPM, maxBPM, page));
     }
   }
 };

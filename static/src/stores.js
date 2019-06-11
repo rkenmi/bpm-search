@@ -14,7 +14,7 @@ export default createStore(
     searchReducer,
     routing: routerReducer,
   }, {}),
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
+  // window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
   applyMiddleware(logger, sagaMiddleware)
 );
 sagaMiddleware.run(LoginSaga);

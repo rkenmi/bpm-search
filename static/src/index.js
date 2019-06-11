@@ -27,7 +27,8 @@ store.subscribe(() => {
 
 render(App);
 if (module.hot) {
-  module.hot.accept('./containers/App', () => { render(App) })
-  module.hot.accept('./containers/TrackSearch', () => { render(App) })
-  module.hot.accept('./containers/Login', () => { render(App) })
+  module.hot.accept();
+  // module.hot.accept('./containers/App', () => { render(App) })
+  // module.hot.accept('./containers/TrackSearch', () => { render(App) })
+  // module.hot.accept('./containers/Login', () => { render(App) })
 }

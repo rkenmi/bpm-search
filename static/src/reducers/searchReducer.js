@@ -1,7 +1,9 @@
 import {FILTER_RESPONSE, LOGIN_FAILURE, SET_AUTH_TOKEN} from "../actions/types";
 
 const initialState = {
-  results: []
+  results: [],
+  page: 0,
+  totalPages: 0,
 };
 
 const searchReducer = (state=initialState, action) => {
@@ -10,6 +12,7 @@ const searchReducer = (state=initialState, action) => {
       state = {
         ...state,
         results: action.results,
+        totalPages: action.totalPages
       };
       break;
 

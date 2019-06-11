@@ -9,16 +9,16 @@ axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
 axios.defaults.xsrfCookieName = "csrftoken";
 
 function* _filter(action) {
-  const {minBPM, maxBPM} = action.payload;
-  const filterURI = `?tempo__range=${minBPM}__${maxBPM}`;
+  const {minBPM, maxBPM, page} = action.payload;
+  const filterURI = `?page=${page}&tempo__range=${minBPM}__${maxBPM}`;
 
   try {
     const res = yield call([axios, axios.get], DEV_URL + TRACKS + filterURI);
 
     if (res.status === 200) {
       console.log(res);
-      const {results} = res.data;
-      yield put(filteredBPMResponse(results));
+      const {results, count} = res.data;
+      yield put(filteredBPMResponse(results, count));
     }
   } catch (e) {
     console.error(e);
