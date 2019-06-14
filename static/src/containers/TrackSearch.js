@@ -172,7 +172,7 @@ class TrackSearch extends Component {
                     <Table.Cell>{song.artist_name}</Table.Cell>
                     <Table.Cell>{song.track_name}</Table.Cell>
                     <Table.Cell>{song.tempo}</Table.Cell>
-                    <Table.Cell>{this._normalizeGenre(song.genre)}</Table.Cell>
+                    <Table.Cell>{song.genres.join(', ')}</Table.Cell>
                   </Table.Row>
                 )
               })}
@@ -182,10 +182,6 @@ class TrackSearch extends Component {
         {totalPages > 0 ? paginationFooter : null}
       </div>
     )
-  }
-  _normalizeGenre(genre) {
-    let genreList = genre.split(',');
-    return genreList.length > 0 ? genreList.join(', ') : genreList[0];
   }
 
   render() {
