@@ -5,7 +5,8 @@ import {
   Form,
   FormField,
   Icon, Pagination,
-  Segment, Table
+  Search,
+  Segment, Table, Label
 } from 'semantic-ui-react'
 import {Content} from '../components/Content';
 import {filterByBPM} from "../actions/searchActions";
@@ -16,11 +17,17 @@ const initialState = {
   value: '',
   minBPM: '',
   maxBPM: '',
-  activePage: 1
+  activePage: 1,
+  genres: {}
 };
+
+const source = [{title: 'Dance'}, {title: 'Pop'}, {title: 'Reggae'}, {title: 'Opera'}];
+
+const resultRenderer = ({title}) => <Label content={title} />
 
 class TrackSearch extends Component {
   state = initialState;
+
 
   static defaultProps = {
     exampleTracks: [
@@ -39,8 +46,24 @@ class TrackSearch extends Component {
     return number;
   };
 
+  handleSearchChange = (e, { value } ) => {
+    this.setState({ isLoading: true, value });
+
+    setTimeout(() => {
+      // if (this.state.value.length < 1) return this.setState(initialState);
+
+      const re = new RegExp(_.escapeRegExp(this.state.value), 'i');
+      const isMatch = result => re.test(result.title);
+
+      this.setState({
+        isLoading: false,
+        genres: _.filter(source, isMatch),
+      })
+    }, 300)
+  };
+
   renderFilterByBPMSearch() {
-    const {minBPM, maxBPM} = this.state;
+    const {minBPM, maxBPM, genres, value, isLoading} = this.state;
 
     return (
       <Segment>
@@ -74,6 +97,20 @@ class TrackSearch extends Component {
                 placeholder={'ex: 150'}
                 value={maxBPM}
               />
+              </div>
+              <div style={{marginLeft: '1em'}}>
+                <div className={'field'}>
+                  <label>Genres</label>
+                  <Search
+                    loading={isLoading}
+                    results={genres}
+                    value={value}
+                    onSearchChange={_.debounce(this.handleSearchChange, 500, {
+                      leading: true
+                    })}
+                    resultRenderer={resultRenderer}
+                  />
+                </div>
               </div>
               <div style={{display: 'flex', marginLeft: '1em', alignItems: 'flex-end'}}>
                 <Form.Button
