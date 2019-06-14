@@ -7,7 +7,7 @@ from project.tracks.models import Track
 tracks_index = Index('tracks')
 tracks_index.settings(
     number_of_shards=1,
-    number_of_replicas=0
+    number_of_replicas=1
 )
 
 html_strip = analyzer('html_strip',
@@ -20,7 +20,15 @@ html_strip = analyzer('html_strip',
 @tracks_index.doc_type
 class TrackDocument(DocType):
     id = fields.IntegerField(attr='id')
-    genre = fields.StringField()
+    genres = fields.StringField(
+        attr='genres_indexing',
+        # analyzer=html_strip,
+        analyzer='keyword',
+        # fields={
+        #     'raw': fields.StringField(analyzer='keyword', multi=True),
+        # },
+        multi=True
+    )
     artist_name = fields.StringField()
     duration_ms = fields.LongField()
     track_name = fields.StringField(
@@ -30,7 +38,7 @@ class TrackDocument(DocType):
         }
     )
     track_id = fields.StringField()
-    tempo = fields.FloatField()
+    tempo = fields.IntegerField()
 
-    class Meta:
+    class Meta(object):
         model = Track

@@ -10,7 +10,15 @@ import {
 import {Content} from '../components/Content';
 import {filterByBPM} from "../actions/searchActions";
 
-const initialState = { isLoading: false, results: [], value: '', minBPM: '', maxBPM: ''};
+const initialState = {
+  isLoading: false,
+  results: [],
+  value: '',
+  minBPM: '',
+  maxBPM: '',
+  activePage: 1
+};
+
 class TrackSearch extends Component {
   state = initialState;
 
@@ -38,7 +46,8 @@ class TrackSearch extends Component {
       <Segment>
         <Form>
           <Form.Group>
-            <div style={{display: 'flex', flex: 0.5, justifyContent: 'space-around'}}>
+            <div style={{display: 'flex', flex: 1}}>
+              <div style={{marginLeft: '1em'}}>
               <Form.Input
                 as={FormField}
                 label={'Minimum BPM'}
@@ -51,6 +60,8 @@ class TrackSearch extends Component {
                 placeholder={'ex: 20'}
                 value={minBPM}
               />
+              </div>
+              <div style={{marginLeft: '1em'}}>
               <Form.Input
                 as={FormField}
                 label={'Minimum BPM'}
@@ -63,7 +74,8 @@ class TrackSearch extends Component {
                 placeholder={'ex: 150'}
                 value={maxBPM}
               />
-              <div style={{display: 'flex', alignItems: 'flex-end'}}>
+              </div>
+              <div style={{display: 'flex', marginLeft: '1em', alignItems: 'flex-end'}}>
                 <Form.Button
                   icon
                   labelPosition={'right'}
@@ -87,33 +99,56 @@ class TrackSearch extends Component {
 
   renderResults() {
     const {filteredResults, totalPages} = this.props;
+    const {minBPM, maxBPM, activePage} = this.state;
+
+    const paginationFooter = (
+      <div style={{display: 'flex', justifyContent: 'center'}}>
+        <Pagination
+          activePage={activePage}
+          totalPages={totalPages}
+          onPageChange={(e, {activePage}) => {
+            this.setState({
+              activePage
+            });
+            this.props.filterByBPM(minBPM, maxBPM, activePage)
+          }}
+        />
+      </div>
+    );
 
     return (
-      <div style={{display: 'flex', justifyContent: 'flex-start'}}>
-        <Table>
-          <Table.Header>
-            <Table.Row>
-              <Table.HeaderCell>Artist</Table.HeaderCell>
-              <Table.HeaderCell>Track Title</Table.HeaderCell>
-              <Table.HeaderCell>BPM</Table.HeaderCell>
-              <Table.HeaderCell>Genre</Table.HeaderCell>
-            </Table.Row>
-          </Table.Header>
-          <Table.Body>
-            {filteredResults.map((song) => {
-              return (
-                <Table.Row key={song.track_id}>
-                  <Table.Cell>{song.artist_name}</Table.Cell>
-                  <Table.Cell>{song.track_name}</Table.Cell>
-                  <Table.Cell>{song.tempo}</Table.Cell>
-                  <Table.Cell>{song.genre}</Table.Cell>
-                </Table.Row>
-              )
-            })}
-          </Table.Body>
-        </Table>
+      <div>
+        <div style={{display: 'flex', justifyContent: 'flex-start'}}>
+          <Table fixed={true}>
+            <Table.Header>
+              <Table.Row>
+                <Table.HeaderCell>Artist</Table.HeaderCell>
+                <Table.HeaderCell>Track Title</Table.HeaderCell>
+                <Table.HeaderCell>BPM</Table.HeaderCell>
+                <Table.HeaderCell>Genre</Table.HeaderCell>
+              </Table.Row>
+            </Table.Header>
+            <Table.Body>
+              {filteredResults.map((song, i) => {
+                return (
+                  <Table.Row key={`${song.track_id}-${i}`}>
+                    <Table.Cell>{song.artist_name}</Table.Cell>
+                    <Table.Cell>{song.track_name}</Table.Cell>
+                    <Table.Cell>{song.tempo}</Table.Cell>
+                    <Table.Cell>{this._normalizeGenre(song.genre)}</Table.Cell>
+                  </Table.Row>
+                )
+              })}
+            </Table.Body>
+          </Table>
+        </div>
+        {totalPages > 0 ? paginationFooter : null}
       </div>
     )
+  }
+  _normalizeGenre(genre) {
+    let genreList = genre.split(',');
+    return genreList.length > 0 ? genreList.join(', ') : genreList[0];
   }
 
   render() {
@@ -135,8 +170,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    filterByBPM: (minBPM, maxBPM, page=1) => {
-      dispatch(filterByBPM(minBPM, maxBPM, page));
+    filterByBPM: (minBPM, maxBPM, page=1, genres=[]) => {
+      dispatch(filterByBPM(minBPM, maxBPM, page, genres));
     }
   }
 };

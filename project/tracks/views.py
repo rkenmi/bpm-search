@@ -6,28 +6,30 @@ from django_elasticsearch_dsl_drf.constants import (
     LOOKUP_QUERY_GTE,
     LOOKUP_QUERY_LT,
     LOOKUP_QUERY_LTE,
-)
+    LOOKUP_FILTER_TERMS, LOOKUP_FILTER_PREFIX, LOOKUP_FILTER_WILDCARD, LOOKUP_QUERY_EXCLUDE, SEPARATOR_LOOKUP_FILTER,
+    LOOKUP_FILTER_TERM)
 from django_elasticsearch_dsl_drf.filter_backends import (
     FilteringFilterBackend,
     OrderingFilterBackend,
     DefaultOrderingFilterBackend,
     SearchFilterBackend,
-)
+    CompoundSearchFilterBackend)
 from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet
 
 from project.tracks.documents import TrackDocument
-from project.tracks.serializers import TrackDocumentSerializer
+from project.tracks.serializers import TrackDocumentSerializer, TrackSerializer
 
 
 class TrackViewSet(DocumentViewSet):
     document = TrackDocument
     serializer_class = TrackDocumentSerializer
+    # serializer_class = TrackSerializer
     lookup_field = 'id'
     filter_backends = [
         FilteringFilterBackend,
         OrderingFilterBackend,
         DefaultOrderingFilterBackend,
-        SearchFilterBackend,
+        CompoundSearchFilterBackend,
     ]
 
     # Define search fields
@@ -51,6 +53,29 @@ class TrackViewSet(DocumentViewSet):
                 LOOKUP_QUERY_LTE,
             ],
         },
+        'genres': {
+            'field': 'genres',
+            'lookups': [
+                SEPARATOR_LOOKUP_FILTER,
+                LOOKUP_FILTER_TERM,
+                LOOKUP_FILTER_TERMS,
+                LOOKUP_FILTER_PREFIX,
+                LOOKUP_FILTER_WILDCARD,
+                LOOKUP_QUERY_IN,
+                LOOKUP_QUERY_EXCLUDE
+            ]
+        },
+        # 'genres.raw': {
+        #     'field': 'genres',
+        #     'lookups': [
+        #         LOOKUP_FILTER_TERMS,
+        #         LOOKUP_FILTER_TERM,
+        #         LOOKUP_FILTER_PREFIX,
+        #         LOOKUP_FILTER_WILDCARD,
+        #         LOOKUP_QUERY_IN,
+        #         LOOKUP_QUERY_EXCLUDE
+        #     ]
+        # }
     }
 
     # Define ordering fields
