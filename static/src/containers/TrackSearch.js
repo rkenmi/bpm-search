@@ -5,7 +5,7 @@ import {
   Form,
   FormField,
   Icon, Pagination,
-  Search,
+  Search, Button,
   Segment, Table, Label
 } from 'semantic-ui-react'
 import {Content} from '../components/Content';
@@ -14,16 +14,19 @@ import {filterByBPM} from "../actions/searchActions";
 const initialState = {
   isLoading: false,
   results: [],
-  value: '',
-  minBPM: '',
-  maxBPM: '',
+  genreInput: '',
+  inputFilter: {
+    minBPM: '',
+    maxBPM: '',
+    genres: new Set([])
+  },
   activePage: 1,
-  genres: {}
+  availableGenres: {}
 };
 
 const source = [{title: 'Dance'}, {title: 'Pop'}, {title: 'Reggae'}, {title: 'Opera'}];
 
-const resultRenderer = ({title}) => <Label content={title} />
+const resultRenderer = ({title}) => <Label content={title} />;
 
 class TrackSearch extends Component {
   state = initialState;
@@ -47,23 +50,53 @@ class TrackSearch extends Component {
   };
 
   handleSearchChange = (e, { value } ) => {
-    this.setState({ isLoading: true, value });
+    this.setState({ isLoading: true, genreInput: value });
 
     setTimeout(() => {
       // if (this.state.value.length < 1) return this.setState(initialState);
 
-      const re = new RegExp(_.escapeRegExp(this.state.value), 'i');
+      const re = new RegExp(_.escapeRegExp(this.state.genreInput), 'i');
       const isMatch = result => re.test(result.title);
 
       this.setState({
         isLoading: false,
-        genres: _.filter(source, isMatch),
+        availableGenres: _.filter(source, isMatch),
       })
     }, 300)
   };
 
+  onAddGenreFromSuggestions = (e, {result}) => {
+    const {inputFilter} = this.state;
+    const {genres} = inputFilter;
+
+    let newGenres = new Set(genres);
+    newGenres.add(result.title);
+    this.setState({
+      genreInput: '',
+      inputFilter: {
+        ...inputFilter,
+        genres: newGenres
+      }
+    })
+  };
+
+  onClickGenreButtonToRemove = (genre) => {
+    const {inputFilter} = this.state;
+    const {genres} = inputFilter;
+
+    let newGenres = new Set(genres);
+    newGenres.delete(genre);
+    this.setState({
+      inputFilter: {
+        ...inputFilter,
+        genres: newGenres
+      }
+    })
+  }
+
   renderFilterByBPMSearch() {
-    const {minBPM, maxBPM, genres, value, isLoading} = this.state;
+    const {availableGenres, genreInput, isLoading, inputFilter} = this.state;
+    const {minBPM, maxBPM, genres} = inputFilter;
 
     return (
       <Segment>
@@ -78,7 +111,12 @@ class TrackSearch extends Component {
                 max={500}
                 maxLength={3}
                 onChange={(e, {value}) => {
-                  this.setState({minBPM: this.parseNumber(value)});
+                  this.setState({
+                    inputFilter: {
+                      ...inputFilter,
+                      minBPM: this.parseNumber(value)
+                    }
+                  });
                 }}
                 placeholder={'ex: 20'}
                 value={minBPM}
@@ -87,12 +125,17 @@ class TrackSearch extends Component {
               <div style={{marginLeft: '1em'}}>
               <Form.Input
                 as={FormField}
-                label={'Minimum BPM'}
+                label={'Maximum BPM'}
                 min={20}
                 max={500}
                 maxLength={3}
                 onChange={(e, {value}) => {
-                  this.setState({maxBPM: this.parseNumber(value)});
+                  this.setState({
+                    inputFilter: {
+                      ...inputFilter,
+                      maxBPM: this.parseNumber(value)
+                    }
+                  });
                 }}
                 placeholder={'ex: 150'}
                 value={maxBPM}
@@ -103,8 +146,9 @@ class TrackSearch extends Component {
                   <label>Genres</label>
                   <Search
                     loading={isLoading}
-                    results={genres}
-                    value={value}
+                    results={availableGenres}
+                    value={genreInput}
+                    onResultSelect={this.onAddGenreFromSuggestions}
                     onSearchChange={_.debounce(this.handleSearchChange, 500, {
                       leading: true
                     })}
@@ -128,6 +172,22 @@ class TrackSearch extends Component {
               </div>
             </div>
           </Form.Group>
+          <Form.Group>
+            <div style={{display: 'flex', flex: 1}}>
+              {[...genres].map((genre) => {
+                return (
+                  <div key={genre} style={{marginLeft: '1em'}}>
+                    <Button
+                      positive
+                      onClick={() => {this.onClickGenreButtonToRemove(genre)}}
+                    >
+                      {genre}
+                    </Button>
+                  </div>
+                );
+              })}
+            </div>
+          </Form.Group>
         </Form>
       </Segment>
     )
@@ -136,7 +196,8 @@ class TrackSearch extends Component {
 
   renderResults() {
     const {filteredResults, totalPages} = this.props;
-    const {minBPM, maxBPM, activePage} = this.state;
+    const {inputFilter, activePage} = this.state;
+    const {minBPM, maxBPM} = inputFilter;
 
     const paginationFooter = (
       <div style={{display: 'flex', justifyContent: 'center'}}>
