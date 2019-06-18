@@ -21,10 +21,12 @@ const initialState = {
     genres: new Set([])
   },
   activePage: 1,
-  availableGenres: {}
+  availableGenres: [],
+  availableGenreSelections: []
 };
 
-const source = [{title: 'Dance'}, {title: 'Pop'}, {title: 'Reggae'}, {title: 'Opera'}];
+const _source = ['Dance', 'Pop', 'Reggae', 'Opera', 'Blues'];
+let source = _source.map((genre) => {return {'title': genre}});
 
 const resultRenderer = ({title}) => <Label content={title} />;
 
@@ -38,6 +40,12 @@ class TrackSearch extends Component {
     ]
   };
 
+  componentDidMount() {
+    this.setState({
+      availableGenres: [...source]
+    });
+  }
+
   parseNumber = (value) => {
     let number;
     if (value === '' || isNaN(parseInt(value, 10))) {
@@ -49,53 +57,68 @@ class TrackSearch extends Component {
     return number;
   };
 
-  handleSearchChange = (e, { value } ) => {
-    this.setState({ isLoading: true, genreInput: value });
-
+  _updateSearchSelections(genreInput, availableGenres) {
     setTimeout(() => {
-      // if (this.state.value.length < 1) return this.setState(initialState);
 
       const re = new RegExp(_.escapeRegExp(this.state.genreInput), 'i');
       const isMatch = result => re.test(result.title);
 
       this.setState({
         isLoading: false,
-        availableGenres: _.filter(source, isMatch),
+        availableGenreSelections: _.filter(availableGenres, isMatch),
       })
     }, 300)
+  }
+
+  handleSearchChange = (e, { value } ) => {
+    const {inputFilter, availableGenres, genreInput} = this.state;
+    const {genres} = inputFilter;
+    this.setState({ isLoading: true, genreInput: value });
+
+    this._updateSearchSelections(genreInput, availableGenres);
   };
 
   onAddGenreFromSuggestions = (e, {result}) => {
-    const {inputFilter} = this.state;
+    const {inputFilter, availableGenres, genreInput} = this.state;
     const {genres} = inputFilter;
 
     let newGenres = new Set(genres);
     newGenres.add(result.title);
+
+    const newAvailableGenres = [...availableGenres].filter((curr) => curr.title !== result.title);
+
     this.setState({
       genreInput: '',
       inputFilter: {
         ...inputFilter,
         genres: newGenres
-      }
-    })
+      },
+      availableGenres: newAvailableGenres,
+    });
+
+    this._updateSearchSelections(genreInput, newAvailableGenres);
   };
 
   onClickGenreButtonToRemove = (genre) => {
-    const {inputFilter} = this.state;
+    const {inputFilter, availableGenres} = this.state;
     const {genres} = inputFilter;
+
 
     let newGenres = new Set(genres);
     newGenres.delete(genre);
+    const newAvailableGenres = [...availableGenres];
+    newAvailableGenres.push({title: genre});
     this.setState({
       inputFilter: {
         ...inputFilter,
-        genres: newGenres
-      }
+        genres: newGenres,
+      },
+      availableGenres: newAvailableGenres
     })
-  }
+  };
 
   renderFilterByBPMSearch() {
-    const {availableGenres, genreInput, isLoading, inputFilter} = this.state;
+    const {availableGenreSelections, genreInput, isLoading, inputFilter} = this.state;
     const {minBPM, maxBPM, genres} = inputFilter;
 
     return (
@@ -146,7 +169,7 @@ class TrackSearch extends Component {
                   <label>Genres</label>
                   <Search
                     loading={isLoading}
-                    results={availableGenres}
+                    results={availableGenreSelections}
                     value={genreInput}
                     onResultSelect={this.onAddGenreFromSuggestions}
                     onSearchChange={_.debounce(this.handleSearchChange, 500, {
@@ -162,7 +185,7 @@ class TrackSearch extends Component {
                   labelPosition={'right'}
                   onClick={(e) => {
                     e.preventDefault();
-                    this.props.filterByBPM(minBPM, maxBPM);
+                    this.props.filterByBPM(minBPM, maxBPM, 1, genres);
                   }}
                   disabled={!minBPM || !maxBPM || minBPM < 20 || maxBPM > 500 || maxBPM < minBPM}
                 >
@@ -197,18 +220,20 @@ class TrackSearch extends Component {
   renderResults() {
     const {filteredResults, totalPages} = this.props;
     const {inputFilter, activePage} = this.state;
-    const {minBPM, maxBPM} = inputFilter;
+    const {minBPM, maxBPM, genres} = inputFilter;
 
     const paginationFooter = (
       <div style={{display: 'flex', justifyContent: 'center'}}>
         <Pagination
           activePage={activePage}
           totalPages={totalPages}
+          prevItem={null}
+          nextItem={null}
           onPageChange={(e, {activePage}) => {
             this.setState({
               activePage
             });
-            this.props.filterByBPM(minBPM, maxBPM, activePage)
+            this.props.filterByBPM(minBPM, maxBPM, activePage, genres)
           }}
         />
       </div>

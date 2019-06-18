@@ -9,8 +9,10 @@ axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
 axios.defaults.xsrfCookieName = "csrftoken";
 
 function* _filter(action) {
-  const {minBPM, maxBPM, page} = action.payload;
-  const filterURI = `?page=${page}&tempo__range=${minBPM}__${maxBPM}`;
+  let {minBPM, maxBPM, page=1, genres=new Set()} = action.payload;
+
+  const genreParams = [...genres].join('__');
+  const filterURI = `?page=${page}&tempo__range=${minBPM}__${maxBPM}&genres__terms=${genreParams}`;
 
   try {
     const res = yield call([axios, axios.get], DEV_URL + TRACKS + filterURI);
@@ -18,7 +20,7 @@ function* _filter(action) {
     if (res.status === 200) {
       console.log(res);
       const {results, count} = res.data;
-      yield put(filteredBPMResponse(results, count));
+      yield put(filteredBPMResponse(results, Math.floor(count / 10)));
     }
   } catch (e) {
     console.error(e);
