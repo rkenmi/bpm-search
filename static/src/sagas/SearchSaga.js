@@ -1,9 +1,9 @@
 import {call, put, takeEvery} from 'redux-saga/effects';
-import {AUTH, DEV_URL, TRACKS} from "../config/Api";
+import {AUTH, DEV_URL, GENRES, TRACKS} from "../config/Api";
 import axios from 'axios';
 import {loginFailure, setAuthToken} from "../actions/authActions";
-import {FILTER, LOGIN} from "../actions/types";
-import {filteredBPMResponse} from "../actions/searchActions";
+import {FILTER, GET_GENRES, LOGIN} from "../actions/types";
+import {filteredBPMResponse, getGenresResponse} from "../actions/searchActions";
 
 axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
 axios.defaults.xsrfCookieName = "csrftoken";
@@ -36,8 +36,28 @@ function* _filter(action) {
 
 }
 
+function* _getGenres() {
+
+  try {
+    const res = yield call([axios, axios.get], DEV_URL + GENRES);
+
+    if (res.status === 200) {
+      const {results} = res.data;
+      yield put(getGenresResponse(
+        // Semantic UI Search suggestions look look for the `title` key
+        results.map((obj) => {return {title: obj.name}})
+      ));
+    }
+  } catch (e) {
+    console.error(e);
+    yield put(loginFailure(e.response.statusText));
+  }
+
+}
+
 function* SearchSaga() {
   yield takeEvery(FILTER, _filter);
+  yield takeEvery(GET_GENRES, _getGenres);
 }
 
 export default SearchSaga;

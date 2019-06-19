@@ -1,4 +1,4 @@
-import {FILTER, FILTER_RESPONSE} from "./types";
+import {FILTER, FILTER_RESPONSE, GET_GENRES, GET_GENRES_RESPONSE} from "./types";
 
 export const filterByBPM = (minBPM, maxBPM, page, genres) => {
   return {
@@ -18,5 +18,18 @@ export const filteredBPMResponse = (results, totalPages, timeDiffMs) => {
     results,
     totalPages,
     timeDiffMs
+  }
+};
+
+export const getGenres = () => {
+  return {
+    type: GET_GENRES,
+  }
+};
+
+export const getGenresResponse = (results) => {
+  return {
+    type: GET_GENRES_RESPONSE,
+    results,
   }
 };

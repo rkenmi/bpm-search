@@ -1,10 +1,11 @@
-import {FILTER_RESPONSE, LOGIN_FAILURE, SET_AUTH_TOKEN} from "../actions/types";
+import {FILTER_RESPONSE, GET_GENRES_RESPONSE, LOGIN_FAILURE, SET_AUTH_TOKEN} from "../actions/types";
 
 const initialState = {
   results: [],
   page: 0,
   totalPages: 0,
   queryResponseMs: 0,
+  allGenres: [],
 };
 
 const searchReducer = (state=initialState, action) => {
@@ -15,6 +16,13 @@ const searchReducer = (state=initialState, action) => {
         results: action.results,
         totalPages: action.totalPages,
         queryResponseMs: action.timeDiffMs,
+      };
+      break;
+
+    case GET_GENRES_RESPONSE:
+      state = {
+        ...state,
+        allGenres: action.results
       };
       break;
 

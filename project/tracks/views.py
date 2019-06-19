@@ -15,15 +15,16 @@ from django_elasticsearch_dsl_drf.filter_backends import (
     SearchFilterBackend,
     CompoundSearchFilterBackend)
 from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet
+from rest_framework import viewsets
 
 from project.tracks.documents import TrackDocument
-from project.tracks.serializers import TrackDocumentSerializer, TrackSerializer
+from project.tracks.serializers import TrackDocumentSerializer, GenreSerializer
+from project.tracks.models import Genre
 
 
 class TrackViewSet(DocumentViewSet):
     document = TrackDocument
     serializer_class = TrackDocumentSerializer
-    # serializer_class = TrackSerializer
     lookup_field = 'id'
     filter_backends = [
         FilteringFilterBackend,
@@ -65,24 +66,17 @@ class TrackViewSet(DocumentViewSet):
                 LOOKUP_QUERY_EXCLUDE
             ]
         },
-        # 'genres.raw': {
-        #     'field': 'genres',
-        #     'lookups': [
-        #         LOOKUP_FILTER_TERMS,
-        #         LOOKUP_FILTER_TERM,
-        #         LOOKUP_FILTER_PREFIX,
-        #         LOOKUP_FILTER_WILDCARD,
-        #         LOOKUP_QUERY_IN,
-        #         LOOKUP_QUERY_EXCLUDE
-        #     ]
-        # }
     }
 
     # Define ordering fields
     ordering_fields = {
-        # 'track_name': 'track_name.raw',
         'tempo': 'tempo',
     }
 
     # Specify default ordering
     ordering = ('tempo',)
+
+
+class GenreViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Genre.objects.all()
+    serializer_class = GenreSerializer

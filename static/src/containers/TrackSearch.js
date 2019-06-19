@@ -9,7 +9,7 @@ import {
   Segment, Table, Label
 } from 'semantic-ui-react'
 import {Content} from '../components/Content';
-import {filterByBPM} from "../actions/searchActions";
+import {filterByBPM, getGenres} from "../actions/searchActions";
 
 const initialState = {
   isLoading: false,
@@ -22,11 +22,8 @@ const initialState = {
   },
   activePage: 1,
   availableGenres: [],
-  availableGenreSelections: []
+  availableGenresSelectable: []
 };
-
-const _example = ['Dance', 'Pop', 'Reggae', 'Opera', 'Blues'];
-let source = _example.map((genre) => {return {'title': genre}});
 
 const resultRenderer = ({title}) => <Label content={title} />;
 
@@ -34,9 +31,16 @@ class TrackSearch extends Component {
   state = initialState;
 
   componentDidMount() {
-    this.setState({
-      availableGenres: [...source]
-    });
+    this.props.getGenres();
+  }
+
+  componentDidUpdate(prevProps) {
+    // Update when Get Genres Query has a response
+    if (prevProps.allGenres.length === 0 && this.props.allGenres.length > 0) {
+      this.setState({
+        availableGenres: [...this.props.allGenres]
+      })
+    }
   }
 
   parseNumber = (value) => {
@@ -58,7 +62,7 @@ class TrackSearch extends Component {
 
       this.setState({
         isLoading: false,
-        availableGenreSelections: _.filter(availableGenres, isMatch),
+        availableGenresSelectable: _.filter(availableGenres, isMatch),
       })
     }, 300)
   }
@@ -110,7 +114,7 @@ class TrackSearch extends Component {
   };
 
   renderFilterByBPMSearch() {
-    const {availableGenreSelections, genreInput, isLoading, inputFilter} = this.state;
+    const {availableGenresSelectable, genreInput, isLoading, inputFilter} = this.state;
     const {minBPM, maxBPM, genres} = inputFilter;
 
     return (
@@ -164,7 +168,7 @@ class TrackSearch extends Component {
                     <Search
                       loading={isLoading}
                       placeholder={'ex: Pop'}
-                      results={availableGenreSelections}
+                      results={availableGenresSelectable}
                       value={genreInput}
                       onResultSelect={this.onAddGenreFromSuggestions}
                       onSearchChange={_.debounce(this.handleSearchChange, 500, {
@@ -294,6 +298,7 @@ const mapStateToProps = (state) => {
   return {
     auth: state.authReducer,
     filteredResults: state.searchReducer.results,
+    allGenres: state.searchReducer.allGenres,
     totalPages: state.searchReducer.totalPages,
     queryResponseMs: state.searchReducer.queryResponseMs,
   }
@@ -305,6 +310,9 @@ const mapDispatchToProps = (dispatch) => {
       if (minBPM === '') minBPM = 30;
       if (maxBPM === '') maxBPM = 500;
       dispatch(filterByBPM(minBPM, maxBPM, page, genres));
+    },
+    getGenres: () => {
+      dispatch(getGenres());
     }
   }
 };

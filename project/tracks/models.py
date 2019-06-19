@@ -16,7 +16,6 @@ class Genre(models.Model):
 
 
 class Track(models.Model):
-    # genre = models.CharField(max_length=100, blank=True)
     genres = models.ManyToManyField(Genre)
     artist_name = models.CharField(max_length=50)
     track_name = models.CharField(max_length=100)
