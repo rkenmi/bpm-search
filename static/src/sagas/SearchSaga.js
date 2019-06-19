@@ -42,10 +42,9 @@ function* _getGenres() {
     const res = yield call([axios, axios.get], DEV_URL + GENRES);
 
     if (res.status === 200) {
-      const {results} = res.data;
       yield put(getGenresResponse(
         // Semantic UI Search suggestions look look for the `title` key
-        results.map((obj) => {return {title: obj.name}})
+        res.data.map((obj) => {return {title: obj.name}})
       ));
     }
   } catch (e) {
