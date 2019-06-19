@@ -4,6 +4,7 @@ const initialState = {
   results: [],
   page: 0,
   totalPages: 0,
+  queryResponseMs: 0,
 };
 
 const searchReducer = (state=initialState, action) => {
@@ -12,7 +13,8 @@ const searchReducer = (state=initialState, action) => {
       state = {
         ...state,
         results: action.results,
-        totalPages: action.totalPages
+        totalPages: action.totalPages,
+        queryResponseMs: action.timeDiffMs,
       };
       break;
 

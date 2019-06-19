@@ -12,10 +12,11 @@ export const filterByBPM = (minBPM, maxBPM, page, genres) => {
   }
 };
 
-export const filteredBPMResponse = (results, totalPages) => {
+export const filteredBPMResponse = (results, totalPages, timeDiffMs) => {
   return {
     type: FILTER_RESPONSE,
     results,
-    totalPages
+    totalPages,
+    timeDiffMs
   }
 };

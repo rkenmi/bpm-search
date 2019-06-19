@@ -125,46 +125,48 @@ class TrackSearch extends Component {
       <Segment>
         <Form>
           <Form.Group>
-            <div style={{display: 'flex', flex: 1}}>
-              <div style={{marginLeft: '1em'}}>
-              <Form.Input
-                as={FormField}
-                label={'Minimum BPM'}
-                min={20}
-                max={500}
-                maxLength={3}
-                onChange={(e, {value}) => {
-                  this.setState({
-                    inputFilter: {
-                      ...inputFilter,
-                      minBPM: this.parseNumber(value)
-                    }
-                  });
-                }}
-                placeholder={'ex: 20'}
-                value={minBPM}
-              />
+            <div style={{display: 'flex', flexWrap: 'wrap'}}>
+              <div style={{margin: '1em'}}>
+                <Form.Input
+                  as={FormField}
+                  label={'Minimum BPM'}
+                  min={20}
+                  max={500}
+                  maxLength={3}
+                  onChange={(e, {value}) => {
+                    this.setState({
+                      inputFilter: {
+                        ...inputFilter,
+                        minBPM: this.parseNumber(value)
+                      }
+                    });
+                  }}
+                  placeholder={'ex: 20'}
+                  value={minBPM}
+                />
               </div>
-              <div style={{marginLeft: '1em'}}>
-              <Form.Input
-                as={FormField}
-                label={'Maximum BPM'}
-                min={20}
-                max={500}
-                maxLength={3}
-                onChange={(e, {value}) => {
-                  this.setState({
-                    inputFilter: {
-                      ...inputFilter,
-                      maxBPM: this.parseNumber(value)
-                    }
-                  });
-                }}
-                placeholder={'ex: 150'}
-                value={maxBPM}
-              />
+              <div style={{margin: '1em'}}>
+                <Form.Input
+                  as={FormField}
+                  label={'Maximum BPM'}
+                  min={20}
+                  max={500}
+                  maxLength={3}
+                  onChange={(e, {value}) => {
+                    this.setState({
+                      inputFilter: {
+                        ...inputFilter,
+                        maxBPM: this.parseNumber(value)
+                      }
+                    });
+                  }}
+                  placeholder={'ex: 150'}
+                  value={maxBPM}
+                />
               </div>
-              <div style={{marginLeft: '1em'}}>
+
+              <div style={{display: 'flex'}}>
+              <div style={{margin: '1em'}}>
                 <div className={'field'}>
                   <label>Genres</label>
                   <Search
@@ -179,7 +181,7 @@ class TrackSearch extends Component {
                   />
                 </div>
               </div>
-              <div style={{display: 'flex', marginLeft: '1em', alignItems: 'flex-end'}}>
+              <div style={{display: 'flex', margin: '1em', alignItems: 'flex-end'}}>
                 <Form.Button
                   icon
                   labelPosition={'right'}
@@ -187,12 +189,14 @@ class TrackSearch extends Component {
                     e.preventDefault();
                     this.props.filterByBPM(minBPM, maxBPM, 1, genres);
                   }}
-                  disabled={!minBPM || !maxBPM || minBPM < 20 || maxBPM > 500 || maxBPM < minBPM}
+                  disabled={minBPM !== '' && maxBPM !== '' && (minBPM < 20 || maxBPM > 500 || maxBPM < minBPM)}
                 >
                   <Icon name={'search'} />
                   Search
                 </Form.Button>
               </div>
+              </div>
+
             </div>
           </Form.Group>
           <Form.Group>
@@ -216,13 +220,12 @@ class TrackSearch extends Component {
     )
   }
 
-
-  renderResults() {
-    const {filteredResults, totalPages} = this.props;
+  _renderPaginationFooter() {
+    const {totalPages} = this.props;
     const {inputFilter, activePage} = this.state;
     const {minBPM, maxBPM, genres} = inputFilter;
 
-    const paginationFooter = (
+    return (
       <div style={{display: 'flex', justifyContent: 'center'}}>
         <Pagination
           activePage={activePage}
@@ -237,7 +240,23 @@ class TrackSearch extends Component {
           }}
         />
       </div>
-    );
+    )
+  }
+
+  _renderMetaResults() {
+    const {queryResponseMs} = this.props;
+
+    return (
+      <div style={{display: 'flex', margin: '1em', justifyContent: 'center'}}>
+        <Label>{`Response from server retrieved in: ${queryResponseMs / 1000} seconds`}</Label>
+      </div>
+    )
+  }
+
+  renderResults() {
+    const {filteredResults, totalPages, queryResponseMs} = this.props;
+    const {inputFilter, activePage} = this.state;
+    const {minBPM, maxBPM, genres} = inputFilter;
 
     return (
       <div>
@@ -265,7 +284,8 @@ class TrackSearch extends Component {
             </Table.Body>
           </Table>
         </div>
-        {totalPages > 0 ? paginationFooter : null}
+        {queryResponseMs > 0 ? this._renderMetaResults() : null}
+        {totalPages > 0 ? this._renderPaginationFooter() : null}
       </div>
     )
   }
@@ -284,12 +304,15 @@ const mapStateToProps = (state) => {
     auth: state.authReducer,
     filteredResults: state.searchReducer.results,
     totalPages: state.searchReducer.totalPages,
+    queryResponseMs: state.searchReducer.queryResponseMs,
   }
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     filterByBPM: (minBPM, maxBPM, page=1, genres=[]) => {
+      if (minBPM === '') minBPM = 30;
+      if (maxBPM === '') maxBPM = 500;
       dispatch(filterByBPM(minBPM, maxBPM, page, genres));
     }
   }

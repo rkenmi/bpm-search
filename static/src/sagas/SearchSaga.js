@@ -14,13 +14,20 @@ function* _filter(action) {
   const genreParams = [...genres].join('__');
   const filterURI = `?page=${page}&tempo__range=${minBPM}__${maxBPM}&genres__terms=${genreParams}`;
 
+  const timeBeforeQuery = new Date();
   try {
     const res = yield call([axios, axios.get], DEV_URL + TRACKS + filterURI);
 
     if (res.status === 200) {
+      const timeAtResponse = new Date();
+      const timeDiffMs = timeAtResponse.getMilliseconds() - timeBeforeQuery.getMilliseconds();
       console.log(res);
       const {results, count} = res.data;
-      yield put(filteredBPMResponse(results, Math.floor(count / 10)));
+      yield put(filteredBPMResponse(
+        results,
+        Math.floor(count / 10),
+        timeDiffMs
+      ));
     }
   } catch (e) {
     console.error(e);
