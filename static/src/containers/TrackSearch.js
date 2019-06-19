@@ -25,20 +25,13 @@ const initialState = {
   availableGenreSelections: []
 };
 
-const _source = ['Dance', 'Pop', 'Reggae', 'Opera', 'Blues'];
-let source = _source.map((genre) => {return {'title': genre}});
+const _example = ['Dance', 'Pop', 'Reggae', 'Opera', 'Blues'];
+let source = _example.map((genre) => {return {'title': genre}});
 
 const resultRenderer = ({title}) => <Label content={title} />;
 
 class TrackSearch extends Component {
   state = initialState;
-
-
-  static defaultProps = {
-    exampleTracks: [
-      {track_name: 'Time is running out', artist_name: 'Muse', tempo: 'X', genre: 'Rock', track_id: 'A'},
-    ]
-  };
 
   componentDidMount() {
     this.setState({
@@ -71,8 +64,7 @@ class TrackSearch extends Component {
   }
 
   handleSearchChange = (e, { value } ) => {
-    const {inputFilter, availableGenres, genreInput} = this.state;
-    const {genres} = inputFilter;
+    const {availableGenres, genreInput} = this.state;
     this.setState({ isLoading: true, genreInput: value });
 
     this._updateSearchSelections(genreInput, availableGenres);
@@ -166,35 +158,36 @@ class TrackSearch extends Component {
               </div>
 
               <div style={{display: 'flex'}}>
-              <div style={{margin: '1em'}}>
-                <div className={'field'}>
-                  <label>Genres</label>
-                  <Search
-                    loading={isLoading}
-                    results={availableGenreSelections}
-                    value={genreInput}
-                    onResultSelect={this.onAddGenreFromSuggestions}
-                    onSearchChange={_.debounce(this.handleSearchChange, 500, {
-                      leading: true
-                    })}
-                    resultRenderer={resultRenderer}
-                  />
+                <div style={{margin: '1em'}}>
+                  <div className={'field'}>
+                    <label>Genres</label>
+                    <Search
+                      loading={isLoading}
+                      placeholder={'ex: Pop'}
+                      results={availableGenreSelections}
+                      value={genreInput}
+                      onResultSelect={this.onAddGenreFromSuggestions}
+                      onSearchChange={_.debounce(this.handleSearchChange, 500, {
+                        leading: true
+                      })}
+                      resultRenderer={resultRenderer}
+                    />
+                  </div>
                 </div>
-              </div>
-              <div style={{display: 'flex', margin: '1em', alignItems: 'flex-end'}}>
-                <Form.Button
-                  icon
-                  labelPosition={'right'}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    this.props.filterByBPM(minBPM, maxBPM, 1, genres);
-                  }}
-                  disabled={minBPM !== '' && maxBPM !== '' && (minBPM < 20 || maxBPM > 500 || maxBPM < minBPM)}
-                >
-                  <Icon name={'search'} />
-                  Search
-                </Form.Button>
-              </div>
+                <div style={{display: 'flex', margin: '1em', alignItems: 'flex-end'}}>
+                  <Form.Button
+                    icon
+                    labelPosition={'right'}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      this.props.filterByBPM(minBPM, maxBPM, 1, genres);
+                    }}
+                    disabled={minBPM !== '' && maxBPM !== '' && (minBPM < 20 || maxBPM > 500 || maxBPM < minBPM)}
+                  >
+                    <Icon name={'search'} />
+                    Search
+                  </Form.Button>
+                </div>
               </div>
 
             </div>
@@ -255,8 +248,6 @@ class TrackSearch extends Component {
 
   renderResults() {
     const {filteredResults, totalPages, queryResponseMs} = this.props;
-    const {inputFilter, activePage} = this.state;
-    const {minBPM, maxBPM, genres} = inputFilter;
 
     return (
       <div>
