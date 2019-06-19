@@ -13,6 +13,8 @@ new WebpackDevServer(webpack(config), {
   publicPath: config.output.publicPath,
   inline: true,
   hot: true,
+  sockPort: 3000,
+  sockHost: '0.0.0.0',
   historyApiFallback: true,
   headers: { 'Access-Control-Allow-Origin': '*' }
 }).listen(3000, '0.0.0.0', function (err, result) {
