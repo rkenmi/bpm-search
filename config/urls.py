@@ -17,10 +17,13 @@ from django.conf.urls import url, include
 from django.contrib import admin
 from django.contrib.auth.views import LoginView
 
+from project.tracks.views import GenreViewSet
 
 urlpatterns = [
     url(r'^$', LoginView.as_view()),
-    url(r'^foobar/', LoginView.as_view()),
+    url(r'^search/', LoginView.as_view()),
     url(r'^admin/', admin.site.urls),
     url(r'^api/', include('project.api.urls')),
+    url(r'tracks/', include('project.tracks.urls')),
+    url(r'genres/', GenreViewSet.as_view({'get': 'list'}))
 ]

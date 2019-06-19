@@ -1,11 +1,11 @@
-import {SET_AUTH_TOKEN} from "./types";
+import {LOGIN_FAILURE, SET_AUTH_TOKEN} from "./types";
 
-export function setSong(song){
+export const loginFailure = (err) => {
   return {
-    type: "NEW_SONG",
-    payload: song,
+    type: LOGIN_FAILURE,
+    error: err,
   }
-}
+};
 
 export const setAuthToken = (token) => {
   return {

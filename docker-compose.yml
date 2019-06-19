@@ -1,0 +1,23 @@
+version: '3'
+services:
+
+  elasticsearch:
+    image: elasticsearch:6.4.0
+    volumes:
+      - data:/usr/share/elasticsearch/data
+
+  django:
+    container_name: react-django-es
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    command: python manage.py runserver 0.0.0.0:8000
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/code
+    depends_on:
+      - elasticsearch
+
+volumes:
+  data:

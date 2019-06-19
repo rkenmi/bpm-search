@@ -5,7 +5,7 @@ from contextlib import closing
 import requests
 from django.core.management import BaseCommand
 import logging
-from project.car.models import Make, Car
+from project.tracks.models import Make, Car
 
 logger = logging.getLogger(__name__)
 

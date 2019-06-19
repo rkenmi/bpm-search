@@ -3,10 +3,9 @@ import ReactDOM from 'react-dom';
 import './css/index.css';
 import 'semantic-ui-css/semantic.min.css';
 import registerServiceWorker from './registerServiceWorker';
-import { AppContainer } from 'react-hot-loader';
-import { Provider } from 'react-redux';
+import {AppContainer} from 'react-hot-loader';
+import {Provider} from 'react-redux';
 import store from './stores';
-import {BrowserRouter} from "react-router-dom";
 import App from "./containers/App";
 
 const render = Component => {
@@ -17,8 +16,8 @@ const render = Component => {
         <Component />
       </AppContainer>
     </Provider>,
-  document.getElementById('root'),
-);
+    document.getElementById('root'),
+  );
   registerServiceWorker();
 };
 
@@ -28,6 +27,8 @@ store.subscribe(() => {
 
 render(App);
 if (module.hot) {
-  module.hot.accept('./containers/App', () => { render(App) })
-  module.hot.accept('./containers/Login', () => { render(App) })
+  module.hot.accept();
+  // module.hot.accept('./containers/App', () => { render(App) })
+  // module.hot.accept('./containers/TrackSearch', () => { render(App) })
+  // module.hot.accept('./containers/Login', () => { render(App) })
 }
