@@ -7,7 +7,7 @@ app_name = 'tracks'
 router = SimpleRouter()
 router.register(
     prefix=r'',
-    base_name='tracks',
+    basename='tracks',
     viewset=TrackViewSet
 )
 urlpatterns = router.urls
