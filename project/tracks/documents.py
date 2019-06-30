@@ -20,24 +20,20 @@ html_strip = analyzer('html_strip',
 @tracks_index.doc_type
 class TrackDocument(DocType):
     id = fields.IntegerField(attr='id')
-    genres = fields.StringField(
+    genres = fields.TextField(
         attr='genres_indexing',
-        # analyzer=html_strip,
         analyzer='keyword',
-        # fields={
-        #     'raw': fields.StringField(analyzer='keyword', multi=True),
-        # },
         multi=True
     )
-    artist_name = fields.StringField()
+    artist_name = fields.TextField()
     duration_ms = fields.LongField()
-    track_name = fields.StringField(
+    track_name = fields.TextField(
         analyzer=html_strip,
         fields={
-            'raw': fields.StringField(analyzer='keyword'),
+            'raw': fields.TextField(analyzer='keyword'),
         }
     )
-    track_id = fields.StringField()
+    track_id = fields.TextField()
     tempo = fields.IntegerField()
 
     class Meta(object):

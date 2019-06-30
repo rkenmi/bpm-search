@@ -7,13 +7,14 @@ Track = namedtuple('Track', ['genre', 'artist_name', 'track_name', 'track_id', '
                              'loudness', 'mode', 'speechiness', 'tempo', 'time_signature', 'valence'])
 
 es = Elasticsearch(
-    'localhost',
+    'elasticsearch',
 )
 
 if __name__ == '__main__':
-    s = Search(using=es).filter('range', tempo={'gte': 230, 'lt': 300})
+    s = Search(using=es).filter('range', tempo={'gte': 30, 'lt': 300})
     # s = s[10:20]
     res = s.execute()
     for d in res:
+        print(d.meta)
         print(d['tempo'])
     print(len(res))
