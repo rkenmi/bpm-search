@@ -8,14 +8,20 @@ import SearchSaga from "./sagas/SearchSaga";
 import searchReducer from "./reducers/searchReducer";
 
 const sagaMiddleware = createSagaMiddleware();
+const reducers = combineReducers({
+  authReducer,
+  searchReducer,
+  routing: routerReducer,
+}, {});
+
 export default createStore(
-  combineReducers({
-    authReducer,
-    searchReducer,
-    routing: routerReducer,
-  }, {}),
+  reducers,
   // window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
   applyMiddleware(logger, sagaMiddleware)
 );
 sagaMiddleware.run(LoginSaga);
 sagaMiddleware.run(SearchSaga);
+
+export const storeFactory = (initialState) => createStore(
+  reducers, initialState, applyMiddleware(logger, sagaMiddleware)
+);
