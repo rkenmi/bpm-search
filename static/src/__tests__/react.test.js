@@ -1,5 +1,4 @@
 import {configure, mount, shallow, render} from 'enzyme';
-import 'jsdom-global/register'; //at the top of file , even  , before importing react
 import React from 'react';
 import TrackSearch from '../containers/TrackSearch';
 import Adapter from 'enzyme-adapter-react-16';
