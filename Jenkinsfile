@@ -1,21 +1,26 @@
 pipeline {
-    agent any
+  agent any
 
-    stages {
-        stage('Build') {
-            steps {
-                echo 'Building..'
-            }
-        }
-        stage('Test') {
-            steps {
-                echo 'Testing..'
-            }
-        }
-        stage('Deploy') {
-            steps {
-                echo 'Deploying....'
-            }
-        }
+  tools {nodejs "node"}
+
+  stages {
+    stage('Cloning Git') {
+      steps {
+        git 'https://github.com/rkenmi/bpm-search'
+        checkout scm
+      }
     }
+
+    stage('Install dependencies') {
+      steps {
+        sh 'npm install'
+      }
+    }
+
+    stage('Test') {
+      steps {
+         sh 'npm test'
+      }
+    }
+  }
 }
