@@ -17,7 +17,6 @@ pipeline {
       steps {
         sh 'docker image prune -f'
         sh 'docker-compose -f docker-compose.test.yml build'
-        sh 'docker-compose -f docker-compose.test.yml run --rm elasticsearch'
       }
     }
 
