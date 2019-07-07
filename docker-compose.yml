@@ -19,5 +19,15 @@ services:
     depends_on:
       - elasticsearch
 
+  test:
+    container_name: react-django-es-test
+    build:
+      context: .
+    command: python manage.py test
+    volumes:
+      - .:/code
+    depends_on:
+      - django
+
 volumes:
   data:
