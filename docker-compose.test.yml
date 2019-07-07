@@ -1,0 +1,14 @@
+version: '3'
+services:
+
+  test:
+    container_name: react-django-es-test
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    command: bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py test"
+    volumes:
+      - .:/code
+
+volumes:
+  data:
