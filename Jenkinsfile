@@ -16,7 +16,6 @@ pipeline {
     stage('Build Docker containers and start required services') {
       steps {
         sh 'docker image prune -f'
-        sh 'docker-compose -f docker-compose.test.yml build'
       }
     }
 
