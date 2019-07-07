@@ -5,6 +5,10 @@ pipeline {
     nodejs "node"
   }
 
+  options {
+     timeout(time: 4, unit: 'MINUTES')
+  }
+
   stages {
     stage('Cloning Git') {
       steps {
