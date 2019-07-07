@@ -25,7 +25,7 @@ pipeline {
 
     stage('Backend Test') {
       steps {
-        sh ‘docker-compose run --rm test’
+        sh 'docker-compose run --rm test'
       }
     }
   }
