@@ -17,10 +17,15 @@ pipeline {
       }
     }
 
-    stage('Test') {
+    stage('Frontend Test') {
       steps {
          sh 'npm test'
       }
+    }
+
+    stage('Backend Test') {
+        step([$class: 'DockerComposeBuilder', dockerComposeFile: 'docker-compose.yml', option: [$class: 'StartService', scale: 1, service: 'react-django-es'], useCustomDockerComposeFile: true])
+        step([$class: 'DockerComposeBuilder', dockerComposeFile: 'docker-compose.yml', option: [$class: 'StartService', scale: 1, service: 'react-django-es-test'], useCustomDockerComposeFile: true])
     }
   }
 }
