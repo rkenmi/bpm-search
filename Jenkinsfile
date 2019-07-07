@@ -13,6 +13,13 @@ pipeline {
       }
     }
 
+    stage('Build Docker containers and start required services') {
+      steps {
+        sh 'docker-compose -f docker-compose.test.yml build'
+        sh 'docker-compose -f docker-compose.test.yml run --rm elasticsearch'
+      }
+    }
+
     stage('Install dependencies') {
       steps {
         sh 'npm install'
@@ -27,7 +34,6 @@ pipeline {
 
     stage('Backend Test') {
       steps {
-        sh 'docker-compose -f docker-compose.test.yml build'
         sh 'docker-compose -f docker-compose.test.yml run --rm test'
       }
     }
