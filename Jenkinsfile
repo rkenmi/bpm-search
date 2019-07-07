@@ -3,7 +3,6 @@ pipeline {
 
   tools {
     nodejs "node"
-    org.jenkinsci.plugins.docker.commons.tools.DockerTool "latest"
   }
 
   stages {
