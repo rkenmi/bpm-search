@@ -1,6 +1,11 @@
 version: '3'
 services:
 
+  elasticsearch:
+    image: elasticsearch:6.4.0
+    volumes:
+      - data:/usr/share/elasticsearch/data
+
   test:
     container_name: react-django-es-test
     build:
