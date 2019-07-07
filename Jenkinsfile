@@ -27,7 +27,7 @@ pipeline {
 
     stage('Backend Test') {
       steps {
-        step([$class: 'DockerComposeBuilder', dockerComposeFile: 'docker-compose.yml', option: [$class: 'StartService', scale: 1, service: 'test'], useCustomDockerComposeFile: false])
+        sh 'docker-compose run --rm test'
       }
     }
   }
