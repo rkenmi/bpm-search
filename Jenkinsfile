@@ -19,15 +19,12 @@ pipeline {
 
     stage('Frontend Test') {
       steps {
-         sh 'npm test'
+        sh 'npm test'
       }
     }
 
     stage('Backend Test') {
-        script {
-            step([$class: 'DockerComposeBuilder', dockerComposeFile: 'docker-compose.yml', option: [$class: 'StartService', scale: 1, service: 'react-django-es'], useCustomDockerComposeFile: true])
-            step([$class: 'DockerComposeBuilder', dockerComposeFile: 'docker-compose.yml', option: [$class: 'StartService', scale: 1, service: 'react-django-es-test'], useCustomDockerComposeFile: true])
-        }
+      sh ‘docker-compose run --rm test’
     }
   }
 }
