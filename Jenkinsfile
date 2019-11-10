@@ -17,6 +17,7 @@ pipeline {
       }
     }
 
+    /*
     stage('Install dependencies') {
       steps {
         sh 'npm install'
@@ -28,12 +29,13 @@ pipeline {
         sh 'npm test'
       }
     }
+    */
 
     stage('Backend Test') {
       steps {
         script {
             docker.image('elasticsearch:6.4.0').withRun('--env "ES_JAVA_OPTS=-Xms512m -Xmx512m"') { c ->
-                sh "./wait-for-it.sh elasticsearch:9200 -t 30"
+                sh "./wait-for-it.sh 0.0.0.0:9200 -t 30"
             }
         }
         sh 'echo Complete!"'
