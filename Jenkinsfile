@@ -35,6 +35,7 @@ pipeline {
       steps {
         script {
             docker.image('elasticsearch:6.4.0').withRun('--env "ES_JAVA_OPTS=-Xms512m -Xmx512m"', '--name test-elastic') { c ->
+                sh 'pip install -r requirements.txt'
                 sh 'python manage.py makemigrations'
                 sh 'python manage.py migrate'
                 sh 'python manage.py test'
