@@ -32,7 +32,7 @@ pipeline {
     stage('Backend Test') {
       steps {
         script {
-            docker.image('elasticsearch:6.4.0').withRun('-e ES_JAVA_OPTS=-Xms512m -Xmx512m') { c ->
+            docker.image('elasticsearch:6.4.0').withRun('--env "ES_JAVA_OPTS=-Xms512m -Xmx512m"') { c ->
                 sh "./wait-for-it.sh elasticsearch:9200 -t 30"
             }
         }
