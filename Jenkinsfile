@@ -1,7 +1,5 @@
 pipeline {
-  agent {
-    label 'docker'
-  }
+  agent any
 
   tools {
     nodejs "node"
@@ -16,12 +14,6 @@ pipeline {
       steps {
         git 'https://github.com/rkenmi/bpm-search'
         checkout scm
-      }
-    }
-
-    stage('Build Docker containers and start required services') {
-      steps {
-        sh 'docker image prune -f'
       }
     }
 
