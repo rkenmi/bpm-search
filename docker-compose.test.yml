@@ -13,6 +13,7 @@ services:
     build:
       context: .
       dockerfile: ./Dockerfile
+      network: host
     command: ["./wait-for-it.sh", "elasticsearch:9200", "-t", "30", "--", "bash", "-c",
               "python manage.py makemigrations && python manage.py migrate && python manage.py test"]
     volumes:
