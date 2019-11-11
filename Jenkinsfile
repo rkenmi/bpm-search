@@ -33,17 +33,7 @@ pipeline {
 
     stage('Backend Test') {
       steps {
-        script {
-            docker.image('elasticsearch:6.4.0').withRun('--env "ES_JAVA_OPTS=-Xms512m -Xmx512m"', '--name test-elastic') { c ->
-                def img = docker.build()
-                img.inside {
-                    sh 'python manage.py makemigrations'
-                    sh 'python manage.py migrate'
-                    sh 'python manage.py test'
-                }
-            }
-        }
-        sh 'echo Complete!"'
+        sh 'docker-compose -f docker-compose.test.yml run --rm test'
       }
     }
   }
