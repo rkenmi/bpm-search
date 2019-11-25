@@ -13,7 +13,7 @@ pipeline {
     stage('Cloning Git') {
       steps {
         echo "Elasticsearch Test Server: ${env.TEST_ES_SERVER}"
-        echo "TEST_ES_SERVER=${env.TEST_ES_SERVER}" >> test_hosts.env
+        sh 'echo "TEST_ES_SERVER=${env.TEST_ES_SERVER}" >> test_hosts.env'
         git 'https://github.com/rkenmi/bpm-search'
         checkout scm
       }
