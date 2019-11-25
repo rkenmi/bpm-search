@@ -1,25 +1,18 @@
 version: '3.4'
 services:
 
-  elasticsearch:
-    environment:
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-    image: elasticsearch:6.4.0
-    volumes:
-      - data:/usr/share/elasticsearch/data
-
   test:
     container_name: react-django-es-test
     build:
       context: .
       dockerfile: ./Dockerfile
-      network: host
-    command: ["./wait-for-it.sh", "elasticsearch:9200", "-t", "30", "--", "bash", "-c",
-              "python manage.py makemigrations && python manage.py migrate && python manage.py test"]
+    environment:
+      - 'TEST_ES_SERVER=https://search-bpmsearch-dev-tpmrw674gx54xbjs6ciqabwydu.us-west-1.es.amazonaws.com'
+      - 'PYTHONPATH=code/'
+    command: ["bash", "-c",
+              "python manage.py makemigrations && python manage.py migrate && pytest"]
     volumes:
       - .:/code
-    depends_on:
-      - elasticsearch
 
 volumes:
   data:
