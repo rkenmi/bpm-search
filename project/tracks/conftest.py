@@ -1,8 +1,11 @@
 import os
 import pytest
+import logging
+
 from elasticsearch.helpers.test import get_test_client
 from elasticsearch_dsl import connections
 
+logger = logging.getLogger(__name__)
 
 def pytest_configure():
     import django
@@ -31,6 +34,7 @@ def pytest_configure():
         'project.tracks',
     )
 
+    server = os.environ.get('TEST_ES_SERVER', 'elasticsearch:9200')
     settings.configure(
         SITE_ID=1,
         SECRET_KEY='not very secret in tests',
@@ -45,8 +49,24 @@ def pytest_configure():
             },
         ],
         ALLOWED_HOSTS=['localhost', 'elasticsearch'],
-        ES_CLIENT=connections.create_connection(hosts=[os.environ.get('TEST_ES_SERVER', {})], timeout=5),
+        ES_CLIENT=connections.create_connection(hosts=[server], timeout=5),
         INSTALLED_APPS=DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS,
+        LOGGING = {
+            'version': 1,
+            'disable_existing_loggers': False,
+            'handlers': {
+                'console': {
+                    'class': 'logging.StreamHandler',
+                },
+            },
+            'loggers': {
+                'django': {
+                    'handlers': ['console'],
+                    'level': 'DEBUG',
+                    'propagate': True,
+                },
+            },
+        },
         DATABASES={
             'default': {
                 'ENGINE': 'django.db.backends.sqlite3',
@@ -55,7 +75,7 @@ def pytest_configure():
         },
         ELASTICSEARCH_DSL={
             'default': {
-                'hosts': 'elasticsearch:9200'
+                'hosts': server
             }
         }
     )
@@ -67,6 +87,7 @@ def pytest_configure():
 def es_client():
     """Create and return elasticsearch connection"""
     # connection = Elasticsearch([os.environ.get('TEST_ES_SERVER', 'localhost')])
+    logger.info("Creating test ES client")
     connection = get_test_client(nowait='WAIT_FOR_ES' not in os.environ)
     connections.add_connection('default', connection)
     return connection

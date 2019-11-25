@@ -1,6 +1,7 @@
 from unittest import TestCase
 from unittest.mock import patch
 
+import logging
 from django.db import models
 
 import pytest
@@ -16,10 +17,11 @@ factory = APIRequestFactory()
 
 client = RequestsClient()
 
+logger = logging.getLogger(__name__)
 
 @pytest.mark.django_db
 @pytest.mark.usefixtures('es_client')
-class DocTypeTestCase(TestCase):
+class TestDocType(TestCase):
 
     def test_model_instance_update(self):
         doc = TrackDocument()
@@ -37,6 +39,7 @@ class DocTypeTestCase(TestCase):
         track.genres.add(g1)
         track.genres.add(g2)
 
+        logger.info("Test the bulk operation is executed")
         with patch('django_elasticsearch_dsl.documents.bulk') as mock:
             doc.update(track)
             actions = [{
@@ -62,6 +65,7 @@ class DocTypeTestCase(TestCase):
 
     def test_get_queryset(self):
         qs = TrackDocument().get_queryset()
+        logger.info("Test the get queryset operation")
         self.assertIsInstance(qs, models.QuerySet)
         self.assertEqual(qs.model, Track)
 
@@ -76,6 +80,8 @@ class DocTypeTestCase(TestCase):
         track1 = Track(id=1)
         track2 = Track(id=2)
         track3 = Track(id=3)
+
+        logger.info("Test pagination")
         with patch('django_elasticsearch_dsl.documents.bulk') as mock:
             doc.update([track1, track2, track3])
             self.assertEqual(

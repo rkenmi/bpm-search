@@ -101,9 +101,31 @@ DATABASES = {
     }
 }
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+      'file': {
+          'level': 'DEBUG',
+          'class': 'logging.FileHandler',
+          'filename': 'debug.log',
+      },
+      'console': {
+          'class': 'logging.StreamHandler',
+      },
+    },
+    'loggers': {
+      'django': {
+          'handlers': ['file', 'console'],
+          'level': 'INFO',
+          'propagate': True,
+      },
+    },
+}
+
 ELASTICSEARCH_DSL = {
     'default': {
-        'hosts': 'elasticsearch:9200'
+        'hosts': os.environ.get("TEST_ES_SERVER", 'elasticsearch:9200')
     }
 }
 

@@ -1,0 +1,18 @@
+version: '3.4'
+services:
+
+  test:
+    container_name: react-django-es-test
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    environment:
+      - 'TEST_ES_SERVER=https://search-bpmsearch-dev-tpmrw674gx54xbjs6ciqabwydu.us-west-1.es.amazonaws.com'
+      - 'PYTHONPATH=code/'
+    command: ["bash", "-c",
+              "python manage.py makemigrations && python manage.py migrate && pytest"]
+    volumes:
+      - .:/code
+
+volumes:
+  data:
