@@ -12,7 +12,7 @@ pipeline {
   stages {
     stage('Cloning Git') {
       steps {
-        echo ${env.TEST_ES_SERVER}
+        echo "${env.TEST_ES_SERVER}"
         git 'https://github.com/rkenmi/bpm-search'
         checkout scm
       }
