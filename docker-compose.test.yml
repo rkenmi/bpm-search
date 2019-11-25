@@ -6,9 +6,8 @@ services:
     build:
       context: .
       dockerfile: ./Dockerfile
-    environment:
-      - 'TEST_ES_SERVER=https://search-bpmsearch-dev-tpmrw674gx54xbjs6ciqabwydu.us-west-1.es.amazonaws.com'
-      - 'PYTHONPATH=code/'
+    env_file:
+      - ./test_hosts.env
     command: ["bash", "-c",
               "python manage.py makemigrations && python manage.py migrate && pytest"]
     volumes:
